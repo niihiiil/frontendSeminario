@@ -1,7 +1,7 @@
 import React from 'react';
 import { Drawer, List, ListItem, ListItemIcon, ListItemText, Divider, Typography } from '@mui/material';
-import { ShoppingCart, LocalMall, Store, Build } from '@mui/icons-material';
-import { Link } from 'react-router-dom';  // Importa Link de react-router-dom
+import { ShoppingCart, LocalMall, Store, Build, People, CreditCard } from '@mui/icons-material';  // Importa los iconos de crédito y usuarios
+import { Link } from 'react-router-dom';
 
 const Sidebar = () => {
   return (
@@ -36,6 +36,16 @@ const Sidebar = () => {
         <ListItem button component={Link} to="/inventario">
           <ListItemIcon><Store /></ListItemIcon>
           <ListItemText primary="Inventario" />
+        </ListItem>
+        {/* Agrega el botón para Usuarios */}
+        <ListItem button component={Link} to="/usuarios">
+          <ListItemIcon><People /></ListItemIcon>
+          <ListItemText primary="Usuarios" />
+        </ListItem>
+        {/* Agrega el botón para Créditos */}
+        <ListItem button component={Link} to="/creditos">
+          <ListItemIcon><CreditCard /></ListItemIcon>
+          <ListItemText primary="Créditos" />
         </ListItem>
       </List>
       <Divider />

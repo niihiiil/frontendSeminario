@@ -7,6 +7,7 @@ import VentasPage from './components/pages/ventasPage';
 import InventarioPage from './components/pages/inventarioPage';
 import ConfigPage from './components/pages/configPage';
 import UsuariosPage from './components/pages/usuariosPage';
+import CreditosPage from './components/pages/creditosPage';
 
 function App() {
   return (
@@ -40,6 +41,10 @@ function App() {
 
         <Route path="/configuracion" exact>
           <ConfigPage />
+        </Route>
+
+        <Route path="/creditos" exact>
+          <CreditosPage />
         </Route>
       </Switch>
     </Router>

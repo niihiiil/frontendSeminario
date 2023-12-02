@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, CardContent, Typography, Button, ButtonGroup } from '@mui/material';
-import { ShoppingCart, LocalMall, Store, Group, Settings } from '@mui/icons-material';
+import { ShoppingCart, LocalMall, Store, Group, Settings, CreditCard } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 
 const MainPageContent = () => {
@@ -10,6 +10,7 @@ const MainPageContent = () => {
     { title: 'Inventario', description: 'Control de bodega, productos, categorías', link: '/inventario', icon: <Store /> },
     { title: 'Usuarios', description: 'Registro y modificación de usuarios, roles y la información de los empleados', link: '/usuarios', icon: <Group /> },
     { title: 'Config', description: 'Ajustes y configuración del sistema', link: '/configuracion', icon: <Settings /> },
+    { title: 'Créditos', description: 'Créditos de compra y créditos de venta', link: '/creditos', icon: <CreditCard /> }
     //Agregar mas elementos de tarjetas
   ];
 
