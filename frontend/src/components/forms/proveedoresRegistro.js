@@ -3,6 +3,7 @@ import {
   TextField,
   Button,
   Typography,
+  Paper,
 } from '@mui/material';
 
 const FormularioProveedores = ({ onSubmit }) => {
@@ -26,7 +27,7 @@ const FormularioProveedores = ({ onSubmit }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ maxWidth: '400px', marginLeft: '20px' }}>
+    <Paper elevation={3} style={{ maxWidth: '400px', margin: 'auto', padding: '20px', marginTop: '20px' }}>
       <Typography variant="h5" gutterBottom>
         Registrar nuevos proveedores
       </Typography>
@@ -38,6 +39,7 @@ const FormularioProveedores = ({ onSubmit }) => {
         onChange={handleChange}
         fullWidth
         margin="normal"
+        style={{ marginBottom: '10px' }}
       />
       <TextField
         label="Número RUC"
@@ -47,6 +49,7 @@ const FormularioProveedores = ({ onSubmit }) => {
         onChange={handleChange}
         fullWidth
         margin="normal"
+        style={{ marginBottom: '10px' }}
       />
       <TextField
         label="Dirección"
@@ -56,12 +59,12 @@ const FormularioProveedores = ({ onSubmit }) => {
         onChange={handleChange}
         fullWidth
         margin="normal"
+        style={{ marginBottom: '10px' }}
       />
-      <br />
       <Button variant="contained" color="primary" type="submit">
         Registrar
       </Button>
-    </form>
+    </Paper>
   );
 };
 

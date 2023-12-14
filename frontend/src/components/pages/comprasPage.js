@@ -5,18 +5,35 @@ import { Storefront, Assignment } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 
 const ComprasPage = () => {
+  const cardStyle = {
+    width: '200px',
+    height: '250px',
+    display: 'flex',
+    flexDirection: 'column',
+  };
+
+  const contentStyle = {
+    flexGrow: 1,
+    padding: '16px',
+  };
+
+  const buttonGroupStyle = {
+    borderTop: '1px solid #ccc',
+    height: '48px', // Ajusta la altura 
+  };
+
   return (
     <MainPageContainer>
       <h2>Compras</h2>
 
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
         {/* Tarjeta para la gestión de proveedores */}
-        <Card style={{ width: '200px', height: '250px', display: 'flex', flexDirection: 'column' }}>
-          <CardContent style={{ flexGrow: 1 }}>
+        <Card style={cardStyle}>
+          <CardContent style={contentStyle}>
             <Typography variant="h6">Gestión de Proveedores</Typography>
             <Typography variant="body2">Administra tus proveedores y sus detalles</Typography>
           </CardContent>
-          <ButtonGroup fullWidth style={{ borderTop: '1px solid #ccc' }}>
+          <ButtonGroup fullWidth style={{ ...buttonGroupStyle }}>
             <Button
               component={Link}
               to="/compras/proveedores"
@@ -31,12 +48,12 @@ const ComprasPage = () => {
         </Card>
 
         {/* Tarjeta para la gestión de pedidos */}
-        <Card style={{ width: '200px', height: '250px', display: 'flex', flexDirection: 'column' }}>
-          <CardContent style={{ flexGrow: 1 }}>
+        <Card style={cardStyle}>
+          <CardContent style={contentStyle}>
             <Typography variant="h6">Gestión de Pedidos</Typography>
             <Typography variant="body2">Administra tus pedidos y su estado</Typography>
           </CardContent>
-          <ButtonGroup fullWidth style={{ borderTop: '1px solid #ccc' }}>
+          <ButtonGroup fullWidth style={{ ...buttonGroupStyle }}>
             <Button
               component={Link}
               to="/compras/pedidos"

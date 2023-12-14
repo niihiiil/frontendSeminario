@@ -8,6 +8,11 @@ import InventarioPage from './components/pages/inventarioPage';
 import ConfigPage from './components/pages/configPage';
 import UsuariosPage from './components/pages/usuariosPage';
 import CreditosPage from './components/pages/creditosPage';
+import FacturasPage from './components/pages/facturasPage';
+import ClientesPage from './components/pages/clientesPage';
+import ProveedoresPage from './components/pages/proveedoresPage';
+import PedidosPage from './components/pages/pedidosPage';
+
 
 function App() {
   return (
@@ -27,9 +32,26 @@ function App() {
           <ComprasPage />
         </Route>
 
+        <Route path="/pedidos" exact>
+          <PedidosPage />
+        </Route>
+
+        <Route path="/compras/proveedores" exact>
+          <ProveedoresPage />
+        </Route>
+
         <Route path="/ventas" exact>
           <VentasPage />
         </Route>
+
+        <Route path="/facturas" exact>
+          <FacturasPage />
+        </Route>
+
+        <Route path="/ventas/clientes" exact>  
+          <ClientesPage />
+        </Route> 
+
 
         <Route path="/inventario" exact>
           <InventarioPage />
