@@ -37,12 +37,12 @@ const Sidebar = () => {
           <ListItemIcon><Store /></ListItemIcon>
           <ListItemText primary="Inventario" />
         </ListItem>
-        {/* Agrega el botón para Usuarios */}
+        {/*  botón para Usuarios */}
         <ListItem button component={Link} to="/usuarios">
           <ListItemIcon><People /></ListItemIcon>
           <ListItemText primary="Usuarios" />
         </ListItem>
-        {/* Agrega el botón para Créditos */}
+        {/*  botón para Créditos */}
         <ListItem button component={Link} to="/creditos">
           <ListItemIcon><CreditCard /></ListItemIcon>
           <ListItemText primary="Créditos" />

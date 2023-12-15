@@ -11,7 +11,7 @@ const MainPageContent = () => {
     { title: 'Usuarios', description: 'Registro y modificación de usuarios, roles y la información de los empleados', link: '/usuarios', icon: <Group /> },
     { title: 'Config', description: 'Ajustes y configuración del sistema', link: '/configuracion', icon: <Settings /> },
     { title: 'Créditos', description: 'Créditos de compra y créditos de venta', link: '/creditos', icon: <CreditCard /> }
-    //Agregar mas elementos de tarjetas
+    //Agregar mas s tarjetas
   ];
 
   return (

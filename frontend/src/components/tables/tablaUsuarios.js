@@ -15,7 +15,7 @@ const TablaUsuarios = ({ usuarios, onEditarClick }) => {
   const cellStyles = {
     fontSize: '15px',
     fontWeight: 'bold',
-    color: 'white', // Puedes ajustar el color aquí
+    color: 'white', 
   };
 
   const rowStyles = {

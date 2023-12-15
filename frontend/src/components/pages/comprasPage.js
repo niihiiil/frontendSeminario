@@ -19,7 +19,7 @@ const ComprasPage = () => {
 
   const buttonGroupStyle = {
     borderTop: '1px solid #ccc',
-    height: '48px', // Ajusta la altura 
+    height: '48px', 
   };
 
   return (
