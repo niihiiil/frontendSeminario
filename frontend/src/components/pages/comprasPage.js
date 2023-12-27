@@ -1,7 +1,7 @@
 import React from 'react';
 import MainPageContainer from '../layout/mainpagecontainer';
 import { Card, CardContent, Typography, Button, ButtonGroup } from '@mui/material';
-import { Storefront, Assignment } from '@mui/icons-material';
+import { Storefront, Assignment, History } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 
 const ComprasPage = () => {
@@ -63,6 +63,26 @@ const ComprasPage = () => {
               style={{ flex: 1, borderRadius: '0' }}
             >
               Ir a Pedidos
+            </Button>
+          </ButtonGroup>
+        </Card>
+
+        {/* Tarjeta para ver el historial de compras */}
+        <Card style={cardStyle}>
+          <CardContent style={contentStyle}>
+            <Typography variant="h6">Historial de Compras</Typography>
+            <Typography variant="body2">Accede al historial de todas las compras realizadas</Typography>
+          </CardContent>
+          <ButtonGroup fullWidth style={{ ...buttonGroupStyle }}>
+            <Button
+              component={Link}
+              to="/compras/registros"
+              variant="contained"
+              color="primary"
+              endIcon={<History />}
+              style={{ flex: 1, borderRadius: '0' }}
+            >
+              Ver Historial
             </Button>
           </ButtonGroup>
         </Card>

@@ -12,6 +12,8 @@ import FacturasPage from './components/pages/facturasPage';
 import ClientesPage from './components/pages/clientesPage';
 import ProveedoresPage from './components/pages/proveedoresPage';
 import PedidosPage from './components/pages/pedidosPage';
+import HistorialVentasPage from './components/pages/historialVentasPage';
+import HistorialComprasPage from './components/pages/historialComprasPage';
 
 
 function App() {
@@ -32,7 +34,7 @@ function App() {
           <ComprasPage />
         </Route>
 
-        <Route path="/pedidos" exact>
+        <Route path="/compras/pedidos" exact>
           <PedidosPage />
         </Route>
 
@@ -40,17 +42,25 @@ function App() {
           <ProveedoresPage />
         </Route>
 
+        <Route path="/compras/registros" exact>
+          <HistorialComprasPage />
+        </Route>
+
         <Route path="/ventas" exact>
           <VentasPage />
         </Route>
 
-        <Route path="/facturas" exact>
+        <Route path="/ventas/facturas" exact>
           <FacturasPage />
         </Route>
 
         <Route path="/ventas/clientes" exact>  
           <ClientesPage />
         </Route> 
+
+        <Route path="/ventas/registros" exact>
+          <HistorialVentasPage />
+        </Route>
 
 
         <Route path="/inventario" exact>

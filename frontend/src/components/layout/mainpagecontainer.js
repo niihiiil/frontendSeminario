@@ -2,7 +2,7 @@
 import React from 'react';
 import { CssBaseline } from '@mui/material';
 import Sidebar from './sidebar';
-import MainPageContent from './mainpagecontent';
+//import MainPageContent from './mainpagecontent';
 
 const MainPageContainer = ({ children }) => {
   return (
