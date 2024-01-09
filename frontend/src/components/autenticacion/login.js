@@ -1,12 +1,41 @@
 import React, { useState } from 'react';
 import { Container, Paper, Typography, TextField, Button, IconButton, InputAdornment } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import EntityClass from '../../api/entityClass';
+import { useHistory } from 'react-router-dom';  
+import Cookies from 'js-cookie';
 
-const Login = () => {
+const Login = ({ onLogin }) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const history = useHistory();  
 
   const handleTogglePassword = () => {
     setShowPassword(!showPassword);
+  };
+
+  const handleLogin = async () => {
+    try {
+      const response = await EntityClass.login({
+        email,
+        password,
+      });
+      console.log('Server response:', response);
+
+      const { accessToken } = response.data;
+
+      // Almacena el token en una cookie
+      Cookies.set('token', accessToken);
+
+      console.log('Login successful');
+      onLogin();
+      console.log('onLog');
+      console.log('The token is:', Cookies.get('token'));
+      history.push('/main'); 
+    } catch (error) {
+      console.error('Authentication error:', error);
+    }
   };
 
   return (
@@ -24,6 +53,8 @@ const Login = () => {
           margin="normal"
           required
           fullWidth
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
         <TextField
           label="Contraseña"
@@ -32,6 +63,8 @@ const Login = () => {
           required
           fullWidth
           type={showPassword ? 'text' : 'password'}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
@@ -42,7 +75,7 @@ const Login = () => {
             ),
           }}
         />
-        <Button variant="contained" color="primary" fullWidth>
+        <Button variant="contained" color="primary" fullWidth onClick={handleLogin}>
           Iniciar Sesión
         </Button>
       </Paper>

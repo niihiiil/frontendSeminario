@@ -36,7 +36,7 @@ const ComprasPage = () => {
           <ButtonGroup fullWidth style={{ ...buttonGroupStyle }}>
             <Button
               component={Link}
-              to="/compras/proveedores"
+              to="/proveedores"
               variant="contained"
               color="primary"
               endIcon={<Storefront />}

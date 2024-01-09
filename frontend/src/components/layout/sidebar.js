@@ -1,9 +1,16 @@
 import React from 'react';
 import { Drawer, List, ListItem, ListItemIcon, ListItemText, Divider, Typography } from '@mui/material';
-import { ShoppingCart, LocalMall, Store, Build, People, CreditCard } from '@mui/icons-material';  // Importa los iconos de crédito y usuarios
+import { ShoppingCart, LocalMall, Store, Build, People, CreditCard, ExitToApp } from '@mui/icons-material';  // Importa los iconos de crédito y usuarios
 import { Link } from 'react-router-dom';
+import EntityClass from '../../api/entityClass'; 
 
-const Sidebar = () => {
+
+  const Sidebar = () => {
+    const handleLogout = () => {
+      EntityClass.logout(); 
+      console.log('Cerrar sesión');
+    };
+
   return (
     <Drawer
       variant="permanent"
@@ -53,6 +60,10 @@ const Sidebar = () => {
         <ListItem button component={Link} to="/configuracion">
           <ListItemIcon><Build /></ListItemIcon>
           <ListItemText primary="Configuración" />
+        </ListItem>
+        <ListItem button onClick={handleLogout}>
+          <ListItemIcon><ExitToApp /></ListItemIcon>
+          <ListItemText primary="Cerrar Sesión" />
         </ListItem>
       </List>
       <Divider />

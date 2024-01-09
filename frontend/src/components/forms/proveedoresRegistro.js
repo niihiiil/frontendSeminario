@@ -5,12 +5,12 @@ import {
   Typography,
   Paper,
 } from '@mui/material';
+import apiCompras from '../../api/apiCompras';
 
-const FormularioProveedores = ({ onSubmit }) => {
+const ProveedoresRegistro = ({ onSubmit }) => {
   const [formData, setFormData] = useState({
     nombre: '',
-    numeroRUC: '',
-    direccion: '',
+    numeroRUC: ''
   });
 
   const handleChange = (e) => {
@@ -21,13 +21,25 @@ const FormularioProveedores = ({ onSubmit }) => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onSubmit(formData);
+
+    try {
+      const response = await apiCompras.agregarProveedor({
+        name: formData.nombre,
+        ruccode: formData.numeroRUC,
+      });
+
+      console.log('Proveedor registrado exitosamente:', response);
+
+      onSubmit(formData);
+    } catch (error) {
+      console.error('Error al agregar proveedor:', error.message);
+    }
   };
 
   return (
-    <Paper elevation={3} style={{ maxWidth: '400px', margin: 'auto', padding: '20px', marginTop: '20px' }}>
+    <Paper elevation={3} style={{ maxWidth: '600px', margin: '20px auto', padding: '20px' }}>
       <Typography variant="h5" gutterBottom>
         Registrar nuevos proveedores
       </Typography>
@@ -51,21 +63,17 @@ const FormularioProveedores = ({ onSubmit }) => {
         margin="normal"
         style={{ marginBottom: '10px' }}
       />
-      <TextField
-        label="Dirección"
-        type="text"
-        name="direccion"
-        value={formData.direccion}
-        onChange={handleChange}
-        fullWidth
-        margin="normal"
-        style={{ marginBottom: '10px' }}
-      />
-      <Button variant="contained" color="primary" type="submit">
+      <Button
+        variant="contained"
+        color="primary"
+        type="submit"
+        onClick={handleSubmit}
+        style={{ marginTop: '10px' }}
+      >
         Registrar
       </Button>
     </Paper>
   );
 };
 
-export default FormularioProveedores;
+export default ProveedoresRegistro;
