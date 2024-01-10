@@ -113,13 +113,13 @@ const TablaProveedores = ({ proveedores, onEditarClick, handleGuardarEdicion, on
               value={selectedProveedor ? selectedProveedor.ruccode : ''}
               onChange={(e) => handleEditFieldChange('ruccode', e.target.value)}
             />
-            {/* Agrega más campos según tus necesidades */}
           </form>
         </DialogContent>
         <DialogActions>
-        <Button onClick={() => { handleGuardarEdicion(selectedProveedor); handleCloseModal(); }} color="primary">
-          Cerrar
+        <Button onClick={() => { console.log(selectedProveedor); handleGuardarEdicion(selectedProveedor); handleCloseModal(); }} color="primary">
+           Cerrar
         </Button>
+
         </DialogActions>
       </Dialog>
     </TableContainer>

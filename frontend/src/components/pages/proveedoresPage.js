@@ -45,23 +45,26 @@ const ProveedoresPage = () => {
 
   const handleGuardarEdicion = async (editedProveedor) => {
     try {
-      await apiCompras.actualizarProveedor(editedProveedor.id, {
-        name: editedProveedor.nombre,
-        ruccode: editedProveedor.numeroRUC,
-      });
-
+      console.log('Datos a enviar al servidor:', editedProveedor);
+  
+      await apiCompras.actualizarProveedor(editedProveedor);
+    
       console.log('Proveedor actualizado exitosamente:', editedProveedor);
-
+    
       cargarProveedores();
     } catch (error) {
       console.error('Error al actualizar proveedor:', error);
     }
   };
-
+  
+  
+  
   const handleEliminarProveedor = async (proveedorId) => {
     try {
       console.log('Intentando eliminar proveedor con ID:', proveedorId);
       const response = await apiCompras.eliminarProveedor(proveedorId);
+  
+      console.log('Respuesta de eliminación:', response);
   
       if (response.status === 200) {
         console.log('Proveedor eliminado exitosamente:', proveedorId);
@@ -73,6 +76,7 @@ const ProveedoresPage = () => {
       console.error('Error al eliminar proveedor:', error);
     }
   };
+  
   
 
   return (

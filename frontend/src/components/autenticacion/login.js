@@ -4,6 +4,7 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 import EntityClass from '../../api/entityClass';
 import { useHistory } from 'react-router-dom';  
 import Cookies from 'js-cookie';
+import '../styles/login.css';
 
 const Login = ({ onLogin }) => {
   const [email, setEmail] = useState('');
@@ -40,6 +41,7 @@ const Login = ({ onLogin }) => {
 
   return (
     <Container component="main" maxWidth="xs" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
+      <div className="background-svg" />
       <Paper elevation={3} sx={{ padding: 4, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <Typography variant="h5" component="h1" mb={2}>
           Libreria Edelweiss

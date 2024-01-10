@@ -25,9 +25,14 @@ const apiCompras = {
     }
   },
 
-  actualizarProveedor: async (proveedorId, proveedorData) => {
+  actualizarProveedor: async (proveedorData) => {
     try {
-      const response = await axios.put(`${API_BASE_URL}/${proveedorId}`, proveedorData);
+      const response = await axios.put(`${API_BASE_URL}`, proveedorData, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+  
       console.log('Actualizar Proveedor:', response.data);
       return response.data;
     } catch (error) {
@@ -35,10 +40,12 @@ const apiCompras = {
       throw error;
     }
   },
-
+  
+  
+  
   eliminarProveedor: async (proveedorId) => {
     try {
-      const response = await axios.delete(`${API_BASE_URL}/${proveedorId}`);
+      const response = await axios.delete(`${API_BASE_URL}`, { data: { id: proveedorId } });
       console.log('Eliminar Proveedor:', response.data);
       return response.data;
     } catch (error) {
@@ -46,6 +53,6 @@ const apiCompras = {
       throw error;
     }
   },
-};
+};  
 
 export default apiCompras;
