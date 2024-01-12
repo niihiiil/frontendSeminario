@@ -39,7 +39,7 @@ const ProveedoresRegistro = ({ onSubmit }) => {
   };
 
   return (
-    <Paper elevation={3} style={{ maxWidth: '600px', margin: '20px auto', padding: '20px' }}>
+    <Paper elevation={3} style={{ maxWidth: 'none', margin: '20px auto', padding: '20px' }}>
       <Typography variant="h5" gutterBottom>
         Registrar nuevos proveedores
       </Typography>

@@ -59,6 +59,8 @@ const ProveedoresPage = () => {
   
   
   
+
+
   const handleEliminarProveedor = async (proveedorId) => {
     try {
       console.log('Intentando eliminar proveedor con ID:', proveedorId);

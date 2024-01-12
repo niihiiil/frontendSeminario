@@ -7,6 +7,7 @@ import ComprasPage from './components/pages/comprasPage';
 import VentasPage from './components/pages/ventasPage';
 import InventarioPage from './components/pages/inventarioPage';
 import ConfigPage from './components/pages/configPage';
+import EmpleadosPage from './components/pages/empleadoPage';
 import UsuariosPage from './components/pages/usuariosPage';
 import CreditosPage from './components/pages/creditosPage';
 import FacturasPage from './components/pages/facturasPage';
@@ -28,6 +29,10 @@ function App() {
   return (
     <Router>
       <Switch>
+
+          {/* Redirección predeterminada a /login */}
+          <Redirect from="/" to="/login" exact />
+
         {/* Página de inicio de sesión */}
         <Route path="/login" exact>
           <Login onLogin={() => setIsAuthenticated(true)} />
@@ -37,18 +42,19 @@ function App() {
         <ProtectedRoute path="/main" component={MainPage} isAuthenticated={isAuthenticated} />
 
         <ProtectedRoute path="/compras" component={ComprasPage} isAuthenticated={isAuthenticated} />
-        <ProtectedRoute path="/compras/pedidos" component={PedidosPage} isAuthenticated={isAuthenticated} />
+        <ProtectedRoute path="/pedidos" component={PedidosPage} isAuthenticated={isAuthenticated} />
         <ProtectedRoute path="/proveedores" component={ProveedoresPage} isAuthenticated={isAuthenticated} />
-        <ProtectedRoute path="/compras/registros" component={HistorialComprasPage} isAuthenticated={isAuthenticated} />
+        <ProtectedRoute path="/registroCompras" component={HistorialComprasPage} isAuthenticated={isAuthenticated} />
 
         <ProtectedRoute path="/ventas" component={VentasPage} isAuthenticated={isAuthenticated} />
-        <ProtectedRoute path="/ventas/facturas" component={FacturasPage} isAuthenticated={isAuthenticated} />
-        <ProtectedRoute path="/ventas/clientes" component={ClientesPage} isAuthenticated={isAuthenticated} />
-        <ProtectedRoute path="/ventas/registros" component={HistorialVentasPage} isAuthenticated={isAuthenticated} />
+        <ProtectedRoute path="/facturas" component={FacturasPage} isAuthenticated={isAuthenticated} />
+        <ProtectedRoute path="/clientes" component={ClientesPage} isAuthenticated={isAuthenticated} />
+        <ProtectedRoute path="/registroVentas" component={HistorialVentasPage} isAuthenticated={isAuthenticated} />
 
         <ProtectedRoute path="/inventario" component={InventarioPage} isAuthenticated={isAuthenticated} />
         <ProtectedRoute path="/usuarios" component={UsuariosPage} isAuthenticated={isAuthenticated} />
         <ProtectedRoute path="/configuracion" component={ConfigPage} isAuthenticated={isAuthenticated} />
+        <ProtectedRoute path="/empleados" component={EmpleadosPage} isAuthenticated={isAuthenticated} />
         <ProtectedRoute path="/creditos" component={CreditosPage} isAuthenticated={isAuthenticated} />
 
         {/* Página de error 404 */}

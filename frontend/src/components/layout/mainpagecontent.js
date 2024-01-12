@@ -3,6 +3,7 @@ import { Card, CardContent, Typography, Button, ButtonGroup } from '@mui/materia
 import { ShoppingCart, LocalMall, Store, Group, Settings, CreditCard } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 
+
 const MainPageContent = () => {
   const cardData = [
     { title: 'Compras', description: 'Gestión de compras, proveedores, facturas de compra', link: '/compras', icon: <ShoppingCart /> },

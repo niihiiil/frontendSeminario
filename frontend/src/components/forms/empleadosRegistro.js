@@ -7,15 +7,19 @@ import {
   MenuItem,
   FormControl,
   InputLabel,
+  Paper,
+  Grid,
 } from '@mui/material';
 
-const FormularioEmpleados = ({ onSubmit }) => {
+const EmpleadosRegistro = ({ onSubmit }) => {
   const [formData, setFormData] = useState({
-    nombre: '',
-    apellido: '',
+    primerNombre: '',
+    segundoNombre: '',
+    primerApellido: '',
+    segundoApellido: '',
     genero: 'Masculino',
-    cedula: '',
-    fechaNacimiento: '',
+    numeroIdentificacion: '',
+    edad: '',
   });
 
   const handleChange = (e) => {
@@ -28,65 +32,102 @@ const FormularioEmpleados = ({ onSubmit }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(formData);
+    if (typeof onSubmit === 'function') {
+      onSubmit(formData);
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ maxWidth: '400px', marginLeft: '20px' }}>
-      <Typography variant="h5" gutterBottom>
-        Registrar nuevos empleados
-      </Typography>
-      <TextField
-        label="Nombre"
-        type="text"
-        name="nombre"
-        value={formData.nombre}
-        onChange={handleChange}
-        fullWidth
-        margin="normal"
-      />
-      <TextField
-        label="Apellido"
-        type="text"
-        name="apellido"
-        value={formData.apellido}
-        onChange={handleChange}
-        fullWidth
-        margin="normal"
-      />
-      <FormControl fullWidth margin="normal">
-        <InputLabel>Género</InputLabel>
-        <Select name="genero" value={formData.genero} onChange={handleChange}>
-          <MenuItem value="Masculino">Masculino</MenuItem>
-          <MenuItem value="Femenino">Femenino</MenuItem>
-          <MenuItem value="Otros">Otros</MenuItem>
-        </Select>
-      </FormControl>
-      <TextField
-        label="Cédula"
-        type="text"
-        name="cedula"
-        value={formData.cedula}
-        onChange={handleChange}
-        fullWidth
-        margin="normal"
-      />
-      <TextField
-        label="Fecha de Nacimiento"
-        type="date"
-        name="fechaNacimiento"
-        value={formData.fechaNacimiento}
-        onChange={handleChange}
-        fullWidth
-        margin="normal"
-        InputLabelProps={{ shrink: true }}
-      />
-      <br />
-      <Button variant="contained" color="primary" type="submit">
-        Registrar
-      </Button>
-    </form>
+    <Paper elevation={3} style={{ maxWidth: 'none', margin: '20px auto', padding: '20px' }}>
+      <form onSubmit={handleSubmit}>
+        <Typography variant="h5" gutterBottom>
+          Registrar nuevos empleados
+        </Typography>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              label="Primer Nombre"
+              type="text"
+              name="primerNombre"
+              value={formData.primerNombre}
+              onChange={handleChange}
+              fullWidth
+              margin="normal"
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              label="Segundo Nombre"
+              type="text"
+              name="segundoNombre"
+              value={formData.segundoNombre}
+              onChange={handleChange}
+              fullWidth
+              margin="normal"
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              label="Primer Apellido"
+              type="text"
+              name="primerApellido"
+              value={formData.primerApellido}
+              onChange={handleChange}
+              fullWidth
+              margin="normal"
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              label="Segundo Apellido"
+              type="text"
+              name="segundoApellido"
+              value={formData.segundoApellido}
+              onChange={handleChange}
+              fullWidth
+              margin="normal"
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <FormControl fullWidth margin="normal">
+              <InputLabel>Género</InputLabel>
+              <Select name="genero" value={formData.genero} onChange={handleChange}>
+                <MenuItem value="Masculino">Masculino</MenuItem>
+                <MenuItem value="Femenino">Femenino</MenuItem>
+                <MenuItem value="Otros">Otros</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              label="Número de Identificación"
+              type="text"
+              name="numeroIdentificacion"
+              value={formData.numeroIdentificacion}
+              onChange={handleChange}
+              fullWidth
+              margin="normal"
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              label="Edad"
+              type="text"
+              name="edad"
+              value={formData.edad}
+              onChange={handleChange}
+              fullWidth
+              margin="normal"
+            />
+          </Grid>
+        </Grid>
+        <br />
+        <Button variant="contained" color="primary" type="submit">
+          Registrar
+        </Button>
+      </form>
+    </Paper>
   );
 };
 
-export default FormularioEmpleados;
+export default EmpleadosRegistro;

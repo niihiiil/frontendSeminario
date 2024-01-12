@@ -34,4 +34,6 @@ class EntityClass {
   }
 }
 
+
+
 export default EntityClass;

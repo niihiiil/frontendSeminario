@@ -56,7 +56,7 @@ const ComprasPage = () => {
           <ButtonGroup fullWidth style={{ ...buttonGroupStyle }}>
             <Button
               component={Link}
-              to="/compras/pedidos"
+              to="/pedidos"
               variant="contained"
               color="primary"
               endIcon={<Assignment />}
@@ -76,7 +76,7 @@ const ComprasPage = () => {
           <ButtonGroup fullWidth style={{ ...buttonGroupStyle }}>
             <Button
               component={Link}
-              to="/compras/registros"
+              to="/registroCompras"
               variant="contained"
               color="primary"
               endIcon={<History />}

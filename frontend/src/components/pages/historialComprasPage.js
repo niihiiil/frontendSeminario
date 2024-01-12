@@ -7,7 +7,8 @@ const HistorialComprasPage = () => {
     <MainPageContainer>
     
       <h2>Registro de Compras</h2>
-  
+         <TablaCompras
+          />
     </MainPageContainer>
   );
 };

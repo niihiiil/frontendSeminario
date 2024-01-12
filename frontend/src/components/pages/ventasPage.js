@@ -19,7 +19,7 @@ const VentasPage = () => {
           <ButtonGroup fullWidth style={{ borderTop: '1px solid #ccc' }}>
             <Button
               component={Link}
-              to="/ventas/clientes"
+              to="/clientes"
               variant="contained"
               color="primary"
               endIcon={<Person />}
@@ -39,7 +39,7 @@ const VentasPage = () => {
           <ButtonGroup fullWidth style={{ borderTop: '1px solid #ccc' }}>
             <Button
               component={Link}
-              to="/ventas/facturas"
+              to="/facturas"
               variant="contained"
               color="primary"
               endIcon={<Description />}
@@ -59,7 +59,7 @@ const VentasPage = () => {
           <ButtonGroup fullWidth style={{ borderTop: '1px solid #ccc' }}>
             <Button
               component={Link}
-              to="/ventas/registros"
+              to="/registroVentas"
               variant="contained"
               color="primary"
               endIcon={<History />}

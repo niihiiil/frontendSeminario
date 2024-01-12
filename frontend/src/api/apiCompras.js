@@ -41,8 +41,6 @@ const apiCompras = {
     }
   },
   
-  
-  
   eliminarProveedor: async (proveedorId) => {
     try {
       const response = await axios.delete(`${API_BASE_URL}`, { data: { id: proveedorId } });
