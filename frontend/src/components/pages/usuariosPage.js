@@ -22,11 +22,25 @@ const UsuariosPage = () => {
     }
   };
 
+  const handleChangePasswordSubmit = async (passwordFormData) => {
+    try {
+      await EntityClass.cambiarContraseña({
+        user: passwordFormData.user,
+        oldPassword: passwordFormData.oldPassword,
+        newPassword: passwordFormData.newPassword,
+      });
+
+      console.log('Contraseña cambiada exitosamente:', passwordFormData);
+    } catch (error) {
+      console.error('Error al cambiar contraseña:', error.message);
+    }
+  };
+
   return (
     <MainPageContainer>
       <h1>Gestor de usuarios</h1>
       <FormularioRegistro onSubmit={handleRegistroSubmit} />
-      <ContraseñaRegistro />
+      <ContraseñaRegistro onSubmit={handleChangePasswordSubmit} />
     </MainPageContainer>
   );
 };

@@ -43,6 +43,18 @@ class EntityClass {
       throw error;
     }
   }
+
+  static async cambiarContraseña(passwordData) {
+    try {
+      const response = await axios.post('http://rsandy-001-site1.atempurl.com/api/user/password', passwordData);
+
+      console.log('Cambio de contraseña exitoso:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('Error en cambiarContraseña:', error);
+      throw error;
+    }
+  }
 }
 
 

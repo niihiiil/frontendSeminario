@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { TextField, Button, Typography, Paper, Box, Grid, InputAdornment, IconButton } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import EntityClass from '../../api/entityClass';
+
 
 const FormularioRegistro = ({ onSubmit }) => {
   const [formData, setFormData] = useState({
