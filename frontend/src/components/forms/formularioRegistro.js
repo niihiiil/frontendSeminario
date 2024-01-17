@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { TextField, Button, Typography, Paper, Box, Grid } from '@mui/material';
+import { TextField, Button, Typography, Paper, Box, Grid, InputAdornment, IconButton } from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import EntityClass from '../../api/entityClass';
 
 const FormularioRegistro = ({ onSubmit }) => {
@@ -12,34 +13,46 @@ const FormularioRegistro = ({ onSubmit }) => {
     contraseña: '',
   });
 
+  const [passwordError, setPasswordError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
       [name]: value,
     });
+
+    // Validación de la contraseña
+    if (name === 'contraseña') {
+      validatePassword(value);
+    }
+  };
+
+  const validatePassword = (password) => {
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{1,}$/;
+    if (!passwordRegex.test(password)) {
+      setPasswordError('La contraseña debe contener al menos 1 mayúscula, 1 número y 1 caracter especial.');
+    } else {
+      setPasswordError('');
+    }
+  };
+
+  const handleTogglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    try {
-      await EntityClass.agregarUsuario({
-        email: formData.correo,
-        password: formData.contraseña,
-        userName: formData.usuario,
-        firstName: formData.nombre,
-        lastName: formData.apellido,
-        phoneNumber: formData.telefono,
-      });
-
-      console.log('Usuario registrado exitosamente:', formData);
-
-      if (typeof onSubmit === 'function') {
-        onSubmit(formData);
-      }
-    } catch (error) {
-      console.error('Error al registrar usuario:', error.message);
+  
+    // Verifica si hay errores en la contraseña antes de enviar el formulario
+    if (passwordError) {
+      console.error('No se puede enviar el formulario debido a errores en la contraseña.');
+      return;
+    }
+  
+    if (typeof onSubmit === 'function') {
+      onSubmit(formData);
     }
   };
 
@@ -109,12 +122,23 @@ const FormularioRegistro = ({ onSubmit }) => {
             <Grid item xs={6}>
               <TextField
                 label="Contraseña"
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 name="contraseña"
                 value={formData.contraseña}
                 onChange={handleChange}
                 fullWidth
                 margin="normal"
+                error={Boolean(passwordError)}
+                helperText={passwordError}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={handleTogglePasswordVisibility} edge="end">
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
               />
             </Grid>
           </Grid>

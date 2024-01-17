@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://rsandy-001-site1.atempurl.com/api/client';
+const API_BASE_URL = 'https://rsandy-001-site1.atempurl.com/api/client';
 
 const apiVentas = {
   obtenerClientes: async () => {
