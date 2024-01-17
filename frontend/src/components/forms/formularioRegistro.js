@@ -1,12 +1,6 @@
 import React, { useState } from 'react';
-import {
-  TextField,
-  Button,
-  Typography,
-  Paper,
-  Box,
-  Grid,
-} from '@mui/material';
+import { TextField, Button, Typography, Paper, Box, Grid } from '@mui/material';
+import EntityClass from '../../api/entityClass';
 
 const FormularioRegistro = ({ onSubmit }) => {
   const [formData, setFormData] = useState({
@@ -26,9 +20,27 @@ const FormularioRegistro = ({ onSubmit }) => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onSubmit(formData);
+
+    try {
+      await EntityClass.agregarUsuario({
+        email: formData.correo,
+        password: formData.contraseña,
+        userName: formData.usuario,
+        firstName: formData.nombre,
+        lastName: formData.apellido,
+        phoneNumber: formData.telefono,
+      });
+
+      console.log('Usuario registrado exitosamente:', formData);
+
+      if (typeof onSubmit === 'function') {
+        onSubmit(formData);
+      }
+    } catch (error) {
+      console.error('Error al registrar usuario:', error.message);
+    }
   };
 
   return (
@@ -38,7 +50,7 @@ const FormularioRegistro = ({ onSubmit }) => {
           Registrar nuevos usuarios
         </Typography>
         <form onSubmit={handleSubmit} style={{ width: '100%' }}>
-          <Grid container spacing={1}>
+          <Grid container spacing={2}>
             <Grid item xs={6}>
               <TextField
                 label="Nombre"
