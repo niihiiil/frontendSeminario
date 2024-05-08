@@ -6,7 +6,7 @@ const CreditosPage = () => {
   return (
     <MainPageContainer>
     
-      <h2>creditos</h2>
+      <h2>Creditos</h2>
   
     </MainPageContainer>
   );
