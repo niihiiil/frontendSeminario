@@ -30,31 +30,10 @@ const ClientesPage = () => {
     setEditingCliente(null);
   };
 
- const handleClienteSubmit = async (formData) => {
-    try {
-      await apiVentas.agregarCliente({
-        firstName: formData.nombre,
-        secondName: formData.segundoNombre,
-        firstLastName: formData.apellidoPaterno,
-        secondLastName: formData.apellidoMaterno,
-        identificationNumber: formData.numeroIdentificacion,
-        isCreditCandidate: formData.candidatoCredito,
-      });
-      console.log('Cliente registrado exitosamente:', formData);
-      cargarClientes();
-    } catch (error) {
-      console.error('Error al agregar cliente:', error.message);
-    }
-  }
-
   const handleGuardarEdicion = async (editedCliente) => {
     try {
-      console.log('Datos a enviar al servidor:', editedCliente);
-
       await apiVentas.actualizarCliente(editedCliente);
-
       console.log('Cliente actualizado exitosamente:', editedCliente);
-
       cargarClientes();
     } catch (error) {
       console.error('Error al actualizar cliente:', error);
@@ -63,11 +42,7 @@ const ClientesPage = () => {
 
   const handleEliminarCliente = async (clienteId) => {
     try {
-      console.log('Intentando eliminar cliente con ID:', clienteId);
       const response = await apiVentas.eliminarCliente(clienteId);
-
-      console.log('Respuesta de eliminación:', response);
-
       if (response.status === 200) {
         console.log('Cliente eliminado exitosamente:', clienteId);
         cargarClientes();
@@ -79,19 +54,25 @@ const ClientesPage = () => {
     }
   };
 
-  
-  
-
   return (
     <MainPageContainer>
       <h1>Clientes</h1>
       {(editingCliente || !editingCliente) && (
         <ClientesRegistro
-          onSubmit={(formData) => {
-            if (editingCliente) {
-              handleGuardarEdicion({ ...editingCliente, ...formData });
-            } else {
-              handleClienteSubmit(formData);
+          onSubmit={async (formData) => {
+            try {
+              await apiVentas.agregarCliente({
+                firstName: formData.nombre,
+                secondName: formData.segundoNombre,
+                firstLastName: formData.apellidoPaterno,
+                secondLastName: formData.apellidoMaterno,
+                identificationNumber: formData.numeroIdentificacion,
+                isCreditCandidate: formData.candidatoCredito,
+              });
+              console.log('Cliente registrado exitosamente:', formData);
+              cargarClientes();
+            } catch (error) {
+              console.error('Error al agregar cliente:', error.message);
             }
           }}
           onCancel={handleCancelarEdicion}

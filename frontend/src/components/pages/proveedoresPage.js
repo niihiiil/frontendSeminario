@@ -30,44 +30,19 @@ const ProveedoresPage = () => {
     setEditingProveedor(null);
   };
 
-  const handleProveedorSubmit = async (formData) => {
-    try {
-      await apiCompras.agregarProveedor({
-        name: formData.nombre,
-        ruccode: formData.numeroRUC,
-      });
-      console.log('Proveedor registrado exitosamente:', formData);
-      cargarProveedores();
-    } catch (error) {
-      console.error('Error al agregar proveedor:', error.message);
-    }
-  };
-
   const handleGuardarEdicion = async (editedProveedor) => {
     try {
-      console.log('Datos a enviar al servidor:', editedProveedor);
-  
       await apiCompras.actualizarProveedor(editedProveedor);
-    
       console.log('Proveedor actualizado exitosamente:', editedProveedor);
-    
       cargarProveedores();
     } catch (error) {
       console.error('Error al actualizar proveedor:', error);
     }
   };
-  
-  
-  
-
 
   const handleEliminarProveedor = async (proveedorId) => {
     try {
-      console.log('Intentando eliminar proveedor con ID:', proveedorId);
       const response = await apiCompras.eliminarProveedor(proveedorId);
-  
-      console.log('Respuesta de eliminación:', response);
-  
       if (response.status === 200) {
         console.log('Proveedor eliminado exitosamente:', proveedorId);
         cargarProveedores();
@@ -78,22 +53,26 @@ const ProveedoresPage = () => {
       console.error('Error al eliminar proveedor:', error);
     }
   };
-  
-  
 
+ 
   return (
     <MainPageContainer>
       <h1>Proveedores</h1>
       {(editingProveedor || !editingProveedor) && (
         <ProveedoresRegistro
-          onSubmit={(formData) => {
-            if (editingProveedor) {
-              handleGuardarEdicion({ ...editingProveedor, ...formData });
-            } else {
-              handleProveedorSubmit(formData);
-            }
-          }}
-          onCancel={handleCancelarEdicion}
+        onSubmit={async (formData) => {
+          try {
+            await apiCompras.agregarProveedor({
+              name: formData.nombre,
+              ruccode: formData.numeroRUC,
+            });
+            console.log('Proveedor registrado exitosamente:', formData);
+            cargarProveedores();
+          } catch (error) {
+            console.error('Error al agregar proveedor:', error.message);
+          }
+        }}
+        onCancel={handleCancelarEdicion}
         />
       )}
       <TablaProveedores

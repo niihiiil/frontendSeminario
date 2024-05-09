@@ -10,9 +10,9 @@ import {
   InputLabel,
   Grid,
 } from '@mui/material';
-import apiVentas from '../../api/apiVentas';
 
-const ClientesRegistro = ({ onSubmit }) => {
+
+const ClientesRegistro = ({ onSubmit, onCancel }) => {
   const [formData, setFormData] = useState({
     nombre: '',
     segundoNombre: '',
@@ -30,33 +30,17 @@ const ClientesRegistro = ({ onSubmit }) => {
     });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    try {
-      const response = await apiVentas.agregarCliente({
-        firstName: formData.nombre,
-        secondName: formData.segundoNombre,
-        firstLastName: formData.apellidoPaterno,
-        secondLastName: formData.apellidoMaterno,
-        identificationNumber: formData.numeroIdentificacion,
-        isCreditCandidate: formData.candidatoCredito,
-      });
-
-      console.log('Cliente registrado exitosamente:', response);
-
-      onSubmit(formData);
-    } catch (error) {
-      console.error('Error al agregar cliente:', error.message);
-    }
-  };
-
   return (
     <Paper elevation={3} style={{ maxWidth: 'none', margin: '20px auto', padding: '20px' }}>
       <Typography variant="h5" gutterBottom>
         Registrar nuevos clientes
       </Typography>
-      <form onSubmit={handleSubmit}>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          onSubmit(formData);
+        }}
+      >
         <Grid container spacing={2}>
           <Grid item xs={12} sm={4}>
             <TextField
