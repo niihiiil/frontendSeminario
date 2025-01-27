@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Container, Paper, Typography, TextField, Button, IconButton, InputAdornment } from '@mui/material';
+import { Container, Paper, Typography, TextField, Button, IconButton, InputAdornment, Alert } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import EntityClass from '../../api/entityClass';
 import { useHistory } from 'react-router-dom';  
@@ -11,6 +11,10 @@ const Login = ({ onLogin }) => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const history = useHistory();  
+  const [mensaje, setMensaje] = useState({
+    tipo: '',
+    texto: ''
+  });
 
   const handleTogglePassword = () => {
     setShowPassword(!showPassword);
@@ -33,9 +37,19 @@ const Login = ({ onLogin }) => {
       onLogin();
       console.log('onLog');
       console.log('The token is:', Cookies.get('token'));
-      history.push('/main'); 
+      setMensaje({
+        tipo: 'success',
+        texto: '¡Inicio de sesión exitoso! Redirigiendo...'
+      });
+      setTimeout(() => {
+        history.push('/main');
+      }, 1500);
     } catch (error) {
       console.error('Authentication error:', error);
+      setMensaje({
+        tipo: 'error',
+        texto: 'Credenciales incorrectas. Por favor, intente de nuevo.'
+      });
     }
   };
 
@@ -49,6 +63,14 @@ const Login = ({ onLogin }) => {
         <Typography variant="body2" color="textSecondary" align="center" mb={4}>
           Ingrese sus credenciales
         </Typography>
+        {mensaje.tipo && (
+          <Alert 
+            severity={mensaje.tipo}
+            style={{ marginTop: '10px', marginBottom: '10px' }}
+          >
+            {mensaje.texto}
+          </Alert>
+        )}
         <TextField
           label="Usuario"
           variant="outlined"
@@ -56,7 +78,10 @@ const Login = ({ onLogin }) => {
           required
           fullWidth
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => {
+            setEmail(e.target.value);
+            setMensaje({ tipo: '', texto: '' });
+          }}
         />
         <TextField
           label="Contraseña"
@@ -66,7 +91,10 @@ const Login = ({ onLogin }) => {
           fullWidth
           type={showPassword ? 'text' : 'password'}
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={(e) => {
+            setPassword(e.target.value);
+            setMensaje({ tipo: '', texto: '' });
+          }}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">

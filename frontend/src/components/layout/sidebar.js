@@ -1,76 +1,110 @@
-import React from 'react';
-import { Drawer, List, ListItem, ListItemIcon, ListItemText, Divider, Typography } from '@mui/material';
-import { ShoppingCart, LocalMall, Store, Build, People, CreditCard, ExitToApp } from '@mui/icons-material';  // Importa los iconos de crédito y usuarios
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Drawer, List, ListItem, ListItemIcon, ListItemText, Divider, Typography, IconButton } from '@mui/material';
+import { ShoppingCart, LocalMall, Store, Build, People, CreditCard, ExitToApp, Menu, ChevronLeft } from '@mui/icons-material';  // Importa los iconos de crédito y usuarios
+import { Link, useHistory } from 'react-router-dom';
 import EntityClass from '../../api/entityClass'; 
 
-
-  const Sidebar = () => {
-    const handleLogout = () => {
-      EntityClass.logout(); 
-      console.log('Cerrar sesión');
-    };
+const Sidebar = () => {
+  const [isExpanded, setIsExpanded] = useState(true);
+  const history = useHistory();
+  
+  const handleLogout = () => {
+    EntityClass.logout();
+    history.push('/login');
+  };
 
   return (
-    <Drawer
-      variant="permanent"
-      sx={{
-        width: 240,
-        flexShrink: 0,
-        [`& .MuiDrawer-paper`]: { width: 240, boxSizing: 'border-box' },
-      }}
-      open
-    >
-      {/* Header del Sidebar */}
-      <div style={{ padding: '16px', textAlign: 'center', borderBottom: '1px solid #ccc' }}>
-        <Typography variant="h6">
-          <Link to="/main" style={{ textDecoration: 'none', color: 'inherit' }}>
-            Libreria Edelweiss
-          </Link>
-        </Typography>
-      </div>
+    <>
+      <IconButton 
+        onClick={() => setIsExpanded(!isExpanded)}
+        sx={{ 
+          position: 'fixed', 
+          left: isExpanded ? '240px' : '65px', 
+          top: '10px', 
+          zIndex: 1200,
+          transition: 'left 0.3s'
+        }}
+      >
+        {isExpanded ? <ChevronLeft /> : <Menu />}
+      </IconButton>
 
-      {/* Contenido del Sidebar */}
-      <List>
-        <ListItem button component={Link} to="/compras">
-          <ListItemIcon><ShoppingCart /></ListItemIcon>
-          <ListItemText primary="Compras" />
-        </ListItem>
-        <ListItem button component={Link} to="/ventas">
-          <ListItemIcon><LocalMall /></ListItemIcon>
-          <ListItemText primary="Ventas" />
-        </ListItem>
-        <ListItem button component={Link} to="/inventario">
-          <ListItemIcon><Store /></ListItemIcon>
-          <ListItemText primary="Inventario" />
-        </ListItem>
-        {/*  botón para Usuarios */}
-        <ListItem button component={Link} to="/usuarios">
-          <ListItemIcon><People /></ListItemIcon>
-          <ListItemText primary="Usuarios" />
-        </ListItem>
-        {/*  botón para Créditos */}
-        <ListItem button component={Link} to="/creditos">
-          <ListItemIcon><CreditCard /></ListItemIcon>
-          <ListItemText primary="Créditos" />
-        </ListItem>
-      </List>
-      <Divider />
-      <List>
-        <ListItem button component={Link} to="/configuracion">
-          <ListItemIcon><Build /></ListItemIcon>
-          <ListItemText primary="Configuración" />
-        </ListItem>
-        <ListItem button onClick={handleLogout}>
-          <ListItemIcon><ExitToApp /></ListItemIcon>
-          <ListItemText primary="Cerrar Sesión" />
-        </ListItem>
-      </List>
-      <Divider />
-      <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, textAlign: 'center', padding: '8px' }}>
-        UNAN-FAREM Carazo | {new Date().getFullYear()} | Versión 1.0
-      </div>
-    </Drawer>
+      <Drawer
+        variant="permanent"
+        sx={{
+          width: isExpanded ? 240 : 65,
+          flexShrink: 0,
+          transition: 'width 0.3s',
+          [`& .MuiDrawer-paper`]: { 
+            width: isExpanded ? 240 : 65, 
+            boxSizing: 'border-box',
+            overflowX: 'hidden',
+            transition: 'width 0.3s'
+          },
+        }}
+      >
+        <div style={{ 
+          height: '64px', 
+          display: 'flex', 
+          alignItems: 'center', 
+          justifyContent: 'center',
+          borderBottom: '1px solid #ccc'
+        }}>
+          {isExpanded && (
+            <Typography variant="h6">
+              <Link to="/main" style={{ textDecoration: 'none', color: 'inherit' }}>
+                Libreria Edelweiss
+              </Link>
+            </Typography>
+          )}
+        </div>
+
+        <List>
+          <ListItem button component={Link} to="/compras">
+            <ListItemIcon><ShoppingCart /></ListItemIcon>
+            {isExpanded && <ListItemText primary="Compras" />}
+          </ListItem>
+          <ListItem button component={Link} to="/ventas">
+            <ListItemIcon><LocalMall /></ListItemIcon>
+            {isExpanded && <ListItemText primary="Ventas" />}
+          </ListItem>
+          <ListItem button component={Link} to="/inventario">
+            <ListItemIcon><Store /></ListItemIcon>
+            {isExpanded && <ListItemText primary="Inventario" />}
+          </ListItem>
+          <ListItem button component={Link} to="/usuarios">
+            <ListItemIcon><People /></ListItemIcon>
+            {isExpanded && <ListItemText primary="Usuarios" />}
+          </ListItem>
+          <ListItem button component={Link} to="/productos">
+            <ListItemIcon><CreditCard /></ListItemIcon>
+            {isExpanded && <ListItemText primary="Productos" />}
+          </ListItem>
+        </List>
+        <Divider />
+        <List>
+          <ListItem button component={Link} to="/configuracion">
+            <ListItemIcon><Build /></ListItemIcon>
+            {isExpanded && <ListItemText primary="Configuración" />}
+          </ListItem>
+          <ListItem button onClick={handleLogout}>
+            <ListItemIcon><ExitToApp /></ListItemIcon>
+            {isExpanded && <ListItemText primary="Cerrar Sesión" />}
+          </ListItem>
+        </List>
+        {isExpanded && (
+          <div style={{ 
+            position: 'absolute', 
+            bottom: 0, 
+            left: 0, 
+            right: 0, 
+            textAlign: 'center', 
+            padding: '8px' 
+          }}>
+            UNAN-FAREM Carazo | {new Date().getFullYear()} | Versión 1.0
+          </div>
+        )}
+      </Drawer>
+    </>
   );
 };
 

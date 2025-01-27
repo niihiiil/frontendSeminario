@@ -9,13 +9,16 @@ import InventarioPage from './components/pages/inventarioPage';
 import ConfigPage from './components/pages/configPage';
 import EmpleadosPage from './components/pages/empleadoPage';
 import UsuariosPage from './components/pages/usuariosPage';
-import CreditosPage from './components/pages/creditosPage';
 import FacturasPage from './components/pages/facturasPage';
 import ClientesPage from './components/pages/clientesPage';
 import ProveedoresPage from './components/pages/proveedoresPage';
 import PedidosPage from './components/pages/pedidosPage';
 import HistorialVentasPage from './components/pages/historialVentasPage';
 import HistorialComprasPage from './components/pages/historialComprasPage';
+import ProductosPage from './components/pages/productosPage';
+import MarcaPage from './components/pages/marcaPage';
+import catProdPage from './components/pages/catProdPage';
+import HistorialProductosPage from './components/pages/historialProductos';
 import Error404 from './components/autenticacion/error404';
 
 function App() {
@@ -55,8 +58,12 @@ function App() {
         <ProtectedRoute path="/usuarios" component={UsuariosPage} isAuthenticated={isAuthenticated} />
         <ProtectedRoute path="/configuracion" component={ConfigPage} isAuthenticated={isAuthenticated} />
         <ProtectedRoute path="/empleados" component={EmpleadosPage} isAuthenticated={isAuthenticated} />
-        <ProtectedRoute path="/creditos" component={CreditosPage} isAuthenticated={isAuthenticated} />
 
+        <ProtectedRoute path="/productos" component={ProductosPage} isAuthenticated={isAuthenticated} />
+        <ProtectedRoute path="/prodHistorial" component={HistorialProductosPage} isAuthenticated={isAuthenticated} />
+        <ProtectedRoute path="/prodCategoria" component={catProdPage} isAuthenticated={isAuthenticated} />
+        <ProtectedRoute path="/marca" component={MarcaPage} isAuthenticated={isAuthenticated} />
+        
         {/* Página de error 404 */}
         <Route path="/error404" exact>
           <Error404 />
