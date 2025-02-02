@@ -9,50 +9,54 @@ const axiosConfig = {
   }
 };
 
-// Manejador de errores común
-const handleError = (operation, error) => {
-  console.error(`Error en ${operation}:`, error);
-  throw error;
-};
-
 const apiCompras = {
   obtenerProveedores: async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/all`, axiosConfig);
-      console.log('Obtener Proveedores:', response.data);
+      const response = await axios.get(`${API_BASE_URL}`, axiosConfig);
       return response.data;
     } catch (error) {
-      handleError('obtenerProveedores', error);
+      console.error('Error en obtenerProveedores:', error);
+      throw error;
     }
   },
 
   agregarProveedor: async (proveedorData) => {
     try {
-      const response = await axios.post(`${API_BASE_URL}/create`, proveedorData, axiosConfig);
-      console.log('Agregar Proveedor:', response.data);
-      return response.data;
+      await axios.post(`${API_BASE_URL}`, proveedorData, axiosConfig);
+      // Obtener lista actualizada después de agregar
+      return await apiCompras.obtenerProveedores();
     } catch (error) {
-      handleError('agregarProveedor', error);
+      console.error('Error en agregarProveedor:', error);
+      throw error;
     }
   },
 
   actualizarProveedor: async (proveedorData) => {
     try {
-      const response = await axios.put(`${API_BASE_URL}/update`, proveedorData, axiosConfig);
-      console.log('Actualizar Proveedor:', response.data);
-      return response.data;
+      await axios.put(`${API_BASE_URL}`, {
+        id: proveedorData.id,
+        name: proveedorData.name,
+        ruccode: proveedorData.ruccode
+      }, axiosConfig);
+      // Obtener lista actualizada después de actualizar
+      return await apiCompras.obtenerProveedores();
     } catch (error) {
-      handleError('actualizarProveedor', error);
+      console.error('Error en actualizarProveedor:', error);
+      throw error;
     }
   },
   
   eliminarProveedor: async (proveedorId) => {
     try {
-      const response = await axios.delete(`${API_BASE_URL}/delete/${proveedorId}`);
-      console.log('Eliminar Proveedor:', response.data);
-      return response.data;
+      await axios.delete(`${API_BASE_URL}`, {
+        headers: axiosConfig.headers,
+        data: { id: proveedorId }
+      });
+      // Obtener lista actualizada después de eliminar
+      return await apiCompras.obtenerProveedores();
     } catch (error) {
-      handleError('eliminarProveedor', error);
+      console.error('Error en eliminarProveedor:', error);
+      throw error;
     }
   },
 };

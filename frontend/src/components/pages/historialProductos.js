@@ -6,18 +6,27 @@ import apiProd from '../../api/apiProd';
 
 const ProductosPage = () => {
   const [productos, setProductos] = useState([]);
+  const [categorias, setCategorias] = useState([]);
+  const [marcas, setMarcas] = useState([]);
   const [editingProducto, setEditingProducto] = useState(null);
 
   useEffect(() => {
-    cargarProductos();
+    cargarDatos();
   }, []);
 
-  const cargarProductos = async () => {
+  const cargarDatos = async () => {
     try {
-      const data = await apiProd.obtenerProductos();
-      setProductos(data);
+      const [productosData, categoriasData, marcasData] = await Promise.all([
+        apiProd.obtenerProductos(),
+        apiProd.obtenerCategorias(),
+        apiProd.obtenerMarcas()
+      ]);
+      
+      setProductos(productosData);
+      setCategorias(categoriasData);
+      setMarcas(marcasData);
     } catch (error) {
-      console.error('Error al obtener productos:', error);
+      console.error('Error al cargar datos:', error);
     }
   };
 
@@ -33,7 +42,7 @@ const ProductosPage = () => {
     try {
       await apiProd.actualizarProducto(editedProducto);
       console.log('Producto actualizado exitosamente:', editedProducto);
-      cargarProductos();
+      cargarDatos();
     } catch (error) {
       console.error('Error al actualizar producto:', error);
     }
@@ -44,7 +53,7 @@ const ProductosPage = () => {
       const response = await apiProd.eliminarProducto(productoId);
       if (response.status === 200) {
         console.log('Producto eliminado exitosamente:', productoId);
-        cargarProductos();
+        cargarDatos();
       } else {
         console.error('Error al eliminar producto:', response.statusText);
       }
@@ -58,9 +67,11 @@ const ProductosPage = () => {
       <h1>Productos</h1>
       {(editingProducto || !editingProducto) && (
         <ProductosRegistro
+          categorias={categorias}
+          marcas={marcas}
           onSubmit={async (formData) => {
             try {
-                await apiProd.agregarProducto({
+              await apiProd.agregarProducto({
                 name: formData.nombre,
                 description: formData.descripcion,
                 isPack: formData.isPack,
@@ -70,7 +81,7 @@ const ProductosPage = () => {
                 packUnits: formData.unidadesPack
               });
               console.log('Producto registrado exitosamente:', formData);
-              cargarProductos();
+              cargarDatos();
             } catch (error) {
               console.error('Error al agregar producto:', error.message);
             }
@@ -80,6 +91,8 @@ const ProductosPage = () => {
       )}
       <TablaProductos
         productos={productos}
+        categorias={categorias}
+        marcas={marcas}
         onEditarClick={handleEditarClick}
         onEliminarClick={handleEliminarProducto}
         handleGuardarEdicion={handleGuardarEdicion}

@@ -15,9 +15,10 @@ import {
   TextField,
   Checkbox,
   FormControlLabel,
+  MenuItem,
 } from '@mui/material';
 
-const TablaProductos = ({ productos, onEditarClick, handleGuardarEdicion, onEliminarClick }) => {
+const TablaProductos = ({ productos, categorias, marcas, onEditarClick, handleGuardarEdicion, onEliminarClick }) => {
   const cellStyles = {
     fontSize: '15px',
     fontWeight: 'bold',

@@ -32,9 +32,14 @@ const MarcaPage = () => {
 
   const handleGuardarEdicion = async (editedMarca) => {
     try {
-      await apiProd.actualizarMarca(editedMarca);
-      console.log('Marca actualizada exitosamente:', editedMarca);
-      cargarMarcas();
+      const marcasActualizadas = await apiProd.actualizarMarca({
+        id: editedMarca.id,
+        name: editedMarca.name,
+        description: editedMarca.description
+      });
+      const marcasOrdenadas = marcasActualizadas.sort((a, b) => a.id - b.id);
+      setMarcas(marcasOrdenadas);
+      setEditingMarca(null);
     } catch (error) {
       console.error('Error al actualizar marca:', error);
     }
@@ -42,13 +47,9 @@ const MarcaPage = () => {
 
   const handleEliminarMarca = async (marcaId) => {
     try {
-      const response = await apiProd.eliminarMarca(marcaId);
-      if (response.status === 200) {
-        console.log('Marca eliminada exitosamente:', marcaId);
-        cargarMarcas();
-      } else {
-        console.error('Error al eliminar marca:', response.statusText);
-      }
+      const marcasActualizadas = await apiProd.eliminarMarca(marcaId);
+      const marcasOrdenadas = marcasActualizadas.sort((a, b) => a.id - b.id);
+      setMarcas(marcasOrdenadas);
     } catch (error) {
       console.error('Error al eliminar marca:', error);
     }
@@ -57,23 +58,22 @@ const MarcaPage = () => {
   return (
     <MainPageContainer>
       <h1>Marcas</h1>
-      {(editingMarca || !editingMarca) && (
-        <MarcaRegistro
-          onSubmit={async (formData) => {
-            try {
-              await apiProd.agregarMarca({
-                name: formData.nombre,
-                description: formData.descripcion
-              });
-              console.log('Marca registrada exitosamente:', formData);
-              cargarMarcas();
-            } catch (error) {
-              console.error('Error al agregar marca:', error.message);
-            }
-          }}
-          onCancel={handleCancelarEdicion}
-        />
-      )}
+      <MarcaRegistro
+        marca={editingMarca}
+        onSubmit={async (formData) => {
+          try {
+            const marcasActualizadas = await apiProd.agregarMarca({
+              name: formData.nombre,
+              description: formData.descripcion
+            });
+            const marcasOrdenadas = marcasActualizadas.sort((a, b) => a.id - b.id);
+            setMarcas(marcasOrdenadas);
+          } catch (error) {
+            console.error('Error al agregar marca:', error.message);
+          }
+        }}
+        onCancel={handleCancelarEdicion}
+      />
       <TablaMarca
         marcas={marcas}
         onEditarClick={handleEditarClick}

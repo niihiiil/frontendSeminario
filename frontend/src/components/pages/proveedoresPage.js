@@ -32,9 +32,10 @@ const ProveedoresPage = () => {
 
   const handleGuardarEdicion = async (editedProveedor) => {
     try {
-      await apiCompras.actualizarProveedor(editedProveedor);
-      console.log('Proveedor actualizado exitosamente:', editedProveedor);
-      cargarProveedores();
+      const proveedoresActualizados = await apiCompras.actualizarProveedor(editedProveedor);
+      const proveedoresOrdenados = proveedoresActualizados.sort((a, b) => a.id - b.id);
+      setProveedores(proveedoresOrdenados);
+      setEditingProveedor(null);
     } catch (error) {
       console.error('Error al actualizar proveedor:', error);
     }
@@ -42,37 +43,32 @@ const ProveedoresPage = () => {
 
   const handleEliminarProveedor = async (proveedorId) => {
     try {
-      const response = await apiCompras.eliminarProveedor(proveedorId);
-      if (response.status === 200) {
-        console.log('Proveedor eliminado exitosamente:', proveedorId);
-        cargarProveedores();
-      } else {
-        console.error('Error al eliminar proveedor:', response.statusText);
-      }
+      const proveedoresActualizados = await apiCompras.eliminarProveedor(proveedorId);
+      const proveedoresOrdenados = proveedoresActualizados.sort((a, b) => a.id - b.id);
+      setProveedores(proveedoresOrdenados);
     } catch (error) {
       console.error('Error al eliminar proveedor:', error);
     }
   };
 
- 
   return (
     <MainPageContainer>
       <h1>Proveedores</h1>
       {(editingProveedor || !editingProveedor) && (
         <ProveedoresRegistro
-        onSubmit={async (formData) => {
-          try {
-            await apiCompras.agregarProveedor({
-              name: formData.nombre,
-              ruccode: formData.numeroRUC,
-            });
-            console.log('Proveedor registrado exitosamente:', formData);
-            cargarProveedores();
-          } catch (error) {
-            console.error('Error al agregar proveedor:', error.message);
-          }
-        }}
-        onCancel={handleCancelarEdicion}
+          onSubmit={async (formData) => {
+            try {
+              const proveedoresActualizados = await apiCompras.agregarProveedor({
+                name: formData.nombre,
+                ruccode: formData.numeroRUC,
+              });
+              const proveedoresOrdenados = proveedoresActualizados.sort((a, b) => a.id - b.id);
+              setProveedores(proveedoresOrdenados);
+            } catch (error) {
+              console.error('Error al agregar proveedor:', error.message);
+            }
+          }}
+          onCancel={handleCancelarEdicion}
         />
       )}
       <TablaProveedores

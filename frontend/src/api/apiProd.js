@@ -29,9 +29,8 @@ const apiProd = {
 
   agregarCategoria: async (categoriaData) => {
     try {
-      const response = await axios.post(`${API_BASE_URL}/product-category`, categoriaData, axiosConfig);
-      console.log('Add Category:', response.data);
-      return response.data;
+      await axios.post(`${API_BASE_URL}/product-category`, categoriaData, axiosConfig);
+      return await apiProd.obtenerCategorias(); // Obtener lista actualizada
     } catch (error) {
       handleError('agregarCategoria', error);
     }
@@ -39,9 +38,8 @@ const apiProd = {
 
   actualizarCategoria: async (categoriaData) => {
     try {
-      const response = await axios.put(`${API_BASE_URL}/product-category/update`, categoriaData, axiosConfig);
-      console.log('Update Category:', response.data);
-      return response.data;
+      await axios.put(`${API_BASE_URL}/product-category`, categoriaData, axiosConfig);
+      return await apiProd.obtenerCategorias(); // Obtener lista actualizada
     } catch (error) {
       handleError('actualizarCategoria', error);
     }
@@ -49,9 +47,11 @@ const apiProd = {
 
   eliminarCategoria: async (categoriaId) => {
     try {
-      const response = await axios.delete(`${API_BASE_URL}/product-category/delete/${categoriaId}`);
-      console.log('Delete Category:', response.data);
-      return response.data;
+      await axios.delete(`${API_BASE_URL}/product-category`, {
+        headers: axiosConfig.headers,
+        data: { id: categoriaId }
+      });
+      return await apiProd.obtenerCategorias(); // Obtener lista actualizada
     } catch (error) {
       handleError('eliminarCategoria', error);
     }
@@ -70,17 +70,8 @@ const apiProd = {
 
   agregarProducto: async (productoData) => {
     try {
-      const response = await axios.post(`${API_BASE_URL}/products`, {
-        name: productoData.name,
-        description: productoData.description,
-        isPack: productoData.isPack,
-        productCategoryId: productoData.productCategoryId,
-        brandId: productoData.brandId,
-        productInPackId: productoData.productInPackId,
-        packUnits: productoData.packUnits
-      }, axiosConfig);
-      console.log('Add Product:', response.data);
-      return response.data;
+      await axios.post(`${API_BASE_URL}/products`, productoData, axiosConfig);
+      return await apiProd.obtenerProductos(); // Obtener lista actualizada
     } catch (error) {
       handleError('agregarProducto', error);
     }
@@ -88,17 +79,8 @@ const apiProd = {
 
   actualizarProducto: async (productoData) => {
     try {
-      const response = await axios.put(`${API_BASE_URL}/products`, {
-        name: productoData.name,
-        description: productoData.description,
-        isPack: productoData.isPack,
-        productCategoryId: productoData.productCategoryId,
-        brandId: productoData.brandId,
-        productInPackId: productoData.productInPackId,
-        packUnits: productoData.packUnits
-      }, axiosConfig);
-      console.log('Update Product:', response.data);
-      return response.data;
+      await axios.put(`${API_BASE_URL}/products`, productoData, axiosConfig);
+      return await apiProd.obtenerProductos(); // Obtener lista actualizada
     } catch (error) {
       handleError('actualizarProducto', error);
     }
@@ -106,9 +88,11 @@ const apiProd = {
 
   eliminarProducto: async (productoId) => {
     try {
-      const response = await axios.delete(`${API_BASE_URL}/products/${productoId}`);
-      console.log('Delete Product:', response.data);
-      return response.data;
+      await axios.delete(`${API_BASE_URL}/products`, {
+        headers: axiosConfig.headers,
+        data: { id: productoId }
+      });
+      return await apiProd.obtenerProductos(); // Obtener lista actualizada
     } catch (error) {
       handleError('eliminarProducto', error);
     }
@@ -118,46 +102,47 @@ const apiProd = {
   obtenerMarcas: async () => {
     try {
       const response = await axios.get(`${API_BASE_URL}/brands`, axiosConfig);
-      console.log('Get Brands:', response.data);
       return response.data;
     } catch (error) {
-      handleError('obtenerMarcas', error);
+      console.error('Error en obtenerMarcas:', error);
+      throw error;
     }
   },
 
   agregarMarca: async (marcaData) => {
     try {
-      const response = await axios.post(`${API_BASE_URL}/brands`, {
+      await axios.post(`${API_BASE_URL}/brands`, {
         name: marcaData.name,
         description: marcaData.description
       }, axiosConfig);
-      console.log('Add Brand:', response.data);
-      return response.data;
+      return await apiProd.obtenerMarcas();
     } catch (error) {
-      handleError('agregarMarca', error);
+      console.error('Error en agregarMarca:', error);
+      throw error;
     }
   },
 
   actualizarMarca: async (marcaData) => {
     try {
-      const response = await axios.put(`${API_BASE_URL}/brands`, {
+      await axios.put(`${API_BASE_URL}/brands`, {
+        id: marcaData.id,
         name: marcaData.name,
         description: marcaData.description
       }, axiosConfig);
-      console.log('Update Brand:', response.data);
-      return response.data;
+      return await apiProd.obtenerMarcas();
     } catch (error) {
-      handleError('actualizarMarca', error);
+      console.error('Error en actualizarMarca:', error);
+      throw error;
     }
   },
 
   eliminarMarca: async (marcaId) => {
     try {
-      const response = await axios.delete(`${API_BASE_URL}/brands/${marcaId}`);
-      console.log('Delete Brand:', response.data);
-      return response.data;
+      await axios.delete(`${API_BASE_URL}/brands?brandId=${marcaId}`, axiosConfig);
+      return await apiProd.obtenerMarcas();
     } catch (error) {
-      handleError('eliminarMarca', error);
+      console.error('Error en eliminarMarca:', error);
+      throw error;
     }
   },
 };
