@@ -22,6 +22,7 @@ const ProductosPage = () => {
         apiProd.obtenerMarcas()
       ]);
       
+      console.log('Datos de productos:', productosData);
       setProductos(productosData);
       setCategorias(categoriasData);
       setMarcas(marcasData);

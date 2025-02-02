@@ -19,26 +19,40 @@ import {
 } from '@mui/material';
 
 const TablaProductos = ({ productos, categorias, marcas, onEditarClick, handleGuardarEdicion, onEliminarClick }) => {
-  const cellStyles = {
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedProducto, setSelectedProducto] = useState(null);
+
+  const headerCellStyle = {
     fontSize: '15px',
     fontWeight: 'bold',
     color: 'white',
+    textAlign: 'left',
+    padding: '16px',
+    paddingLeft: '20px'
   };
 
   const rowStyles = {
     background: '#2196f3',
-    color: 'black',
+  };
+
+  const bodyCellStyle = {
+    fontSize: '14px',
+    textAlign: 'left',
+    padding: '16px',
+    paddingLeft: '20px'
+  };
+
+  const actionsCellStyle = {
+    ...bodyCellStyle,
+    paddingLeft: '15px'
   };
 
   const buttonStyles = {
     fontSize: '12px',
-    marginRight: '5px',
+    marginRight: '8px',
   };
 
-  const [modalOpen, setModalOpen] = useState(false);
-  const [selectedProducto, setSelectedProducto] = useState(null);
-
-  const handleEditarClick = (producto) => {
+  const handleEditClick = (producto) => {
     setSelectedProducto(producto);
     setModalOpen(true);
   };
@@ -55,55 +69,76 @@ const TablaProductos = ({ productos, categorias, marcas, onEditarClick, handleGu
     });
   };
 
+  // Función auxiliar para mostrar el valor de forma segura
+  const displayValue = (obj, property) => {
+    try {
+      return obj && obj[property] ? obj[property] : 'N/A';
+    } catch (error) {
+      return 'N/A';
+    }
+  };
+
   return (
-    <TableContainer component={Paper} style={{ marginTop: '20px', margin: 'auto' }}>
-      <Table>
-        <TableHead>
-          <TableRow style={rowStyles}>
-            <TableCell style={cellStyles}>Nombre</TableCell>
-            <TableCell style={cellStyles}>Descripción</TableCell>
-            <TableCell style={cellStyles}>Paquete</TableCell>
-            <TableCell style={cellStyles}>Categoría </TableCell>
-            <TableCell style={cellStyles}>Marca </TableCell>
-            <TableCell style={cellStyles}>Producto en Paquete</TableCell>
-            <TableCell style={cellStyles}>Unidades en Paquete</TableCell>
-            <TableCell style={{ ...cellStyles, textAlign: 'center' }}>Acciones</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {productos.map((producto, index) => (
-            <TableRow key={index} style={{ background: index % 2 === 0 ? '#f9f9f9' : 'white' }}>
-              <TableCell style={{ fontSize: '14px', textAlign: 'center' }}>{producto.name}</TableCell>
-              <TableCell style={{ fontSize: '14px', textAlign: 'center' }}>{producto.description}</TableCell>
-              <TableCell style={{ fontSize: '14px', textAlign: 'center' }}>{producto.isPack ? 'Sí' : 'No'}</TableCell>
-              <TableCell style={{ fontSize: '14px', textAlign: 'center' }}>{producto.productCategoryId}</TableCell>
-              <TableCell style={{ fontSize: '14px', textAlign: 'center' }}>{producto.brandId}</TableCell>
-              <TableCell style={{ fontSize: '14px', textAlign: 'center' }}>{producto.productInPackId}</TableCell>
-              <TableCell style={{ fontSize: '14px', textAlign: 'center' }}>{producto.packUnits}</TableCell>
-              <TableCell style={{ textAlign: 'center' }}>
-                <Button
-                  onClick={() => handleEditarClick(producto)}
-                  variant="contained"
-                  color="primary"
-                  size="small"
-                  style={{ ...buttonStyles }}
-                >
-                  Editar
-                </Button>
-                <Button
-                  onClick={() => onEliminarClick(producto.id)}
-                  variant="contained"
-                  color="secondary"
-                  size="small"
-                  style={{ ...buttonStyles, backgroundColor: 'red' }}
-                >
-                  Eliminar
-                </Button>
-              </TableCell>
+    <>
+      <TableContainer component={Paper} style={{ marginTop: '20px', margin: 'auto' }}>
+        <Table>
+          <TableHead>
+            <TableRow style={rowStyles}>
+              <TableCell style={headerCellStyle}>Nombre</TableCell>
+              <TableCell style={headerCellStyle}>Descripción</TableCell>
+              <TableCell style={headerCellStyle}>Paquete</TableCell>
+              <TableCell style={headerCellStyle}>Categoría</TableCell>
+              <TableCell style={headerCellStyle}>Marca</TableCell>
+              <TableCell style={headerCellStyle}>Producto en Paquete</TableCell>
+              <TableCell style={headerCellStyle}>Unidades en Paquete</TableCell>
+              <TableCell style={headerCellStyle}>Acciones</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHead>
+          <TableBody>
+            {productos.map((producto, index) => (
+              <TableRow key={index} style={{ background: index % 2 === 0 ? '#f9f9f9' : 'white' }}>
+                <TableCell style={bodyCellStyle}>{displayValue(producto, 'name')}</TableCell>
+                <TableCell style={bodyCellStyle}>{displayValue(producto, 'description')}</TableCell>
+                <TableCell style={bodyCellStyle}>{producto?.isPack ? 'Sí' : 'No'}</TableCell>
+                <TableCell style={bodyCellStyle}>
+                  {displayValue(producto?.productCategory, 'name')}
+                </TableCell>
+                <TableCell style={bodyCellStyle}>
+                  {displayValue(producto?.brand, 'name')}
+                </TableCell>
+                <TableCell style={bodyCellStyle}>
+                  {producto?.productInPack ? 
+                    (typeof producto.productInPack === 'object' ? 
+                      displayValue(producto.productInPack, 'name') : 
+                      producto.productInPack) 
+                    : 'N/A'}
+                </TableCell>
+                <TableCell style={bodyCellStyle}>{producto?.packUnits || 'N/A'}</TableCell>
+                <TableCell style={actionsCellStyle}>
+                  <Button
+                    onClick={() => handleEditClick(producto)}
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                    style={buttonStyles}
+                  >
+                    Editar
+                  </Button>
+                  <Button
+                    onClick={() => onEliminarClick(producto?.id)}
+                    variant="contained"
+                    color="error"
+                    size="small"
+                    style={buttonStyles}
+                  >
+                    Eliminar
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
       <Dialog open={modalOpen} onClose={handleCloseModal}>
         <DialogTitle>Editar Producto</DialogTitle>
         <DialogContent>
@@ -184,7 +219,7 @@ const TablaProductos = ({ productos, categorias, marcas, onEditarClick, handleGu
           </Button>
         </DialogActions>
       </Dialog>
-    </TableContainer>
+    </>
   );
 };
 

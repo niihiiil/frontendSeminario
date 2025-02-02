@@ -15,27 +15,41 @@ import {
   TextField,
 } from '@mui/material';
 
-const TablaProveedores = ({ proveedores, onEditarClick, handleGuardarEdicion, onEliminarClick }) => {
-  const cellStyles = {
+const TablaProveedores = ({ proveedores, onEditarClick, onEliminarClick, handleGuardarEdicion }) => {
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedProveedor, setSelectedProveedor] = useState(null);
+
+  const headerCellStyle = {
     fontSize: '15px',
     fontWeight: 'bold',
     color: 'white',
+    textAlign: 'left',
+    padding: '16px',
+    paddingLeft: '20px'
   };
 
   const rowStyles = {
     background: '#2196f3',
-    color: 'black',
+  };
+
+  const bodyCellStyle = {
+    fontSize: '14px',
+    textAlign: 'left',
+    padding: '16px',
+    paddingLeft: '20px'
+  };
+
+  const actionsCellStyle = {
+    ...bodyCellStyle,
+    paddingLeft: '15px'
   };
 
   const buttonStyles = {
     fontSize: '12px',
-    marginRight: '5px',
+    marginRight: '8px',
   };
 
-  const [modalOpen, setModalOpen] = useState(false);
-  const [selectedProveedor, setSelectedProveedor] = useState(null);
-
-  const handleEditarClick = (proveedor) => {
+  const handleEditClick = (proveedor) => {
     setSelectedProveedor(proveedor);
     setModalOpen(true);
   };
@@ -52,77 +66,83 @@ const TablaProveedores = ({ proveedores, onEditarClick, handleGuardarEdicion, on
     });
   };
 
+  const handleGuardarClick = () => {
+    handleGuardarEdicion(selectedProveedor);
+    handleCloseModal();
+  };
+
   return (
-    <TableContainer component={Paper} style={{ marginTop: '20px', margin: 'auto' }}>
-      <Table>
-        <TableHead>
-          <TableRow style={rowStyles}>
-            <TableCell style={cellStyles}>Nombre</TableCell>
-            <TableCell style={cellStyles}>Código RUC</TableCell>
-            <TableCell style={{ ...cellStyles, textAlign: 'center' }}>Acciones</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {proveedores.map((proveedor, index) => (
-            <TableRow key={index} style={{ background: index % 2 === 0 ? '#f9f9f9' : 'white' }}>
-              <TableCell style={{ fontSize: '14px', textAlign: 'center' }}>{proveedor.name}</TableCell>
-              <TableCell style={{ fontSize: '14px', textAlign: 'center' }}>{proveedor.ruccode}</TableCell>
-              <TableCell style={{ textAlign: 'center' }}>
-                <Button
-                  onClick={() => handleEditarClick(proveedor)}
-                  variant="contained"
-                  color="primary"
-                  size="small"
-                  style={{ ...buttonStyles }}
-                >
-                  Editar
-                </Button>
-                <Button
-                  onClick={() => onEliminarClick(proveedor.id)}
-                  variant="contained"
-                  color="secondary"
-                  size="small"
-                  style={{ ...buttonStyles, backgroundColor: 'red' }}
-                >
-                  Eliminar
-                </Button>
-              </TableCell>
+    <>
+      <TableContainer component={Paper} style={{ marginTop: '20px', margin: 'auto' }}>
+        <Table>
+          <TableHead>
+            <TableRow style={rowStyles}>
+              <TableCell style={headerCellStyle}>Nombre</TableCell>
+              <TableCell style={headerCellStyle}>RUC</TableCell>
+              <TableCell style={headerCellStyle}>Acciones</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHead>
+          <TableBody>
+            {proveedores.map((proveedor, index) => (
+              <TableRow key={index} style={{ background: index % 2 === 0 ? '#f9f9f9' : 'white' }}>
+                <TableCell style={bodyCellStyle}>{proveedor.name}</TableCell>
+                <TableCell style={bodyCellStyle}>{proveedor.ruccode}</TableCell>
+                <TableCell style={actionsCellStyle}>
+                  <Button
+                    onClick={() => handleEditClick(proveedor)}
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                    style={buttonStyles}
+                  >
+                    Editar
+                  </Button>
+                  <Button
+                    onClick={() => onEliminarClick(proveedor.id)}
+                    variant="contained"
+                    color="error"
+                    size="small"
+                    style={buttonStyles}
+                  >
+                    Eliminar
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+
       <Dialog open={modalOpen} onClose={handleCloseModal}>
         <DialogTitle>Editar Proveedor</DialogTitle>
         <DialogContent>
-          <form>
-            <TextField
-              label="Nombre"
-              variant="outlined"
-              margin="normal"
-              fullWidth
-              required
-              value={selectedProveedor ? selectedProveedor.name : ''}
-              onChange={(e) => handleEditFieldChange('name', e.target.value)}
-            />
-            <TextField
-              label="Código RUC"
-              variant="outlined"
-              margin="normal"
-              fullWidth
-              required
-              value={selectedProveedor ? selectedProveedor.ruccode : ''}
-              onChange={(e) => handleEditFieldChange('ruccode', e.target.value)}
-            />
-          </form>
+          <TextField
+            label="Nombre"
+            variant="outlined"
+            margin="normal"
+            fullWidth
+            value={selectedProveedor ? selectedProveedor.name : ''}
+            onChange={(e) => handleEditFieldChange('name', e.target.value)}
+          />
+          <TextField
+            label="RUC"
+            variant="outlined"
+            margin="normal"
+            fullWidth
+            value={selectedProveedor ? selectedProveedor.ruccode : ''}
+            onChange={(e) => handleEditFieldChange('ruccode', e.target.value)}
+          />
         </DialogContent>
         <DialogActions>
-        <Button onClick={() => { console.log(selectedProveedor); handleGuardarEdicion(selectedProveedor); handleCloseModal(); }} color="primary">
-           Cerrar
-        </Button>
-
+          <Button onClick={handleCloseModal} color="secondary">
+            Cancelar
+          </Button>
+          <Button onClick={handleGuardarClick} color="primary">
+            Guardar
+          </Button>
         </DialogActions>
       </Dialog>
-    </TableContainer>
+    </>
   );
 };
 

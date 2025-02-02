@@ -19,20 +19,34 @@ const TablaMarca = ({ marcas, onEditarClick, onEliminarClick, handleGuardarEdici
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedMarca, setSelectedMarca] = useState(null);
 
-  const cellStyles = {
+  const headerCellStyle = {
     fontSize: '15px',
     fontWeight: 'bold',
     color: 'white',
+    textAlign: 'left',
+    padding: '16px',
+    paddingLeft: '20px'
   };
 
   const rowStyles = {
     background: '#2196f3',
-    color: 'black',
+  };
+
+  const bodyCellStyle = {
+    fontSize: '14px',
+    textAlign: 'left',
+    padding: '16px',
+    paddingLeft: '20px'
+  };
+
+  const actionsCellStyle = {
+    ...bodyCellStyle,
+    paddingLeft: '15px'
   };
 
   const buttonStyles = {
     fontSize: '12px',
-    marginRight: '5px',
+    marginRight: '8px',
   };
 
   const handleEditClick = (marca) => {
@@ -63,17 +77,17 @@ const TablaMarca = ({ marcas, onEditarClick, onEliminarClick, handleGuardarEdici
         <Table>
           <TableHead>
             <TableRow style={rowStyles}>
-              <TableCell style={cellStyles}>Nombre</TableCell>
-              <TableCell style={cellStyles}>Descripción</TableCell>
-              <TableCell style={{ ...cellStyles, textAlign: 'center' }}>Acciones</TableCell>
+              <TableCell style={headerCellStyle}>Nombre</TableCell>
+              <TableCell style={headerCellStyle}>Descripción</TableCell>
+              <TableCell style={headerCellStyle}>Acciones</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {marcas.map((marca, index) => (
               <TableRow key={index} style={{ background: index % 2 === 0 ? '#f9f9f9' : 'white' }}>
-                <TableCell style={{ fontSize: '14px', textAlign: 'center' }}>{marca.name}</TableCell>
-                <TableCell style={{ fontSize: '14px', textAlign: 'center' }}>{marca.description}</TableCell>
-                <TableCell style={{ textAlign: 'center' }}>
+                <TableCell style={bodyCellStyle}>{marca.name}</TableCell>
+                <TableCell style={bodyCellStyle}>{marca.description}</TableCell>
+                <TableCell style={actionsCellStyle}>
                   <Button
                     onClick={() => handleEditClick(marca)}
                     variant="contained"

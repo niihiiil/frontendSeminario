@@ -61,7 +61,7 @@ const apiProd = {
   obtenerProductos: async () => {
     try {
       const response = await axios.get(`${API_BASE_URL}/products`, axiosConfig);
-      console.log('Get Products:', response.data);
+      console.log('Productos obtenidos:', response.data); // Para verificar la estructura de datos
       return response.data;
     } catch (error) {
       handleError('obtenerProductos', error);

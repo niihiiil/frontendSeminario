@@ -4,27 +4,57 @@ import {
   Button,
   Typography,
   Paper,
+  Grid,
   FormControlLabel,
   Checkbox,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
 } from '@mui/material';
 
-const ProductoRegistro = ({ onSubmit }) => {
+const ProductosRegistro = ({ categorias, marcas, onSubmit }) => {
   const [formData, setFormData] = useState({
-    name: '',
-    description: '',
+    nombre: '',
+    descripcion: '',
     isPack: false,
-    productCategoryId: 0,
-    brandId: 0,
-    productInPackId: 0,
-    packUnits: 0
+    categoriaId: '',
+    marcaId: '',
+    productoEnPackId: '',
+    unidadesPack: ''
   });
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: type === 'checkbox' ? checked : value,
+      [name]: value,
     });
+  };
+
+  const handleCheckboxChange = (e) => {
+    setFormData({
+      ...formData,
+      isPack: e.target.checked,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await onSubmit(formData);
+      setFormData({
+        nombre: '',
+        descripcion: '',
+        isPack: false,
+        categoriaId: '',
+        marcaId: '',
+        productoEnPackId: '',
+        unidadesPack: ''
+      });
+    } catch (error) {
+      console.error('Error al registrar producto:', error);
+    }
   };
 
   return (
@@ -32,100 +62,129 @@ const ProductoRegistro = ({ onSubmit }) => {
       <Typography variant="h5" gutterBottom>
         Registrar nuevo producto
       </Typography>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          onSubmit(formData);
-        }}
-      >
-        <TextField
-          label="Nombre del producto"
-          type="text"
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
-          style={{ marginBottom: '10px' }}
-        />
-        <TextField
-          label="Descripción"
-          type="text"
-          name="description"
-          value={formData.description}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
-          multiline
-          rows={3}
-          style={{ marginBottom: '10px' }}
-        />
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={formData.isPack}
-              onChange={handleChange}
-              name="isPack"
-            />
-          }
-          label="¿Es un pack?"
-          style={{ marginBottom: '10px' }}
-        />
-        <TextField
-          label="Categoría ID"
-          type="number"
-          name="productCategoryId"
-          value={formData.productCategoryId}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
-          style={{ marginBottom: '10px' }}
-        />
-        <TextField
-          label="Marca ID"
-          type="number"
-          name="brandId"
-          value={formData.brandId}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
-          style={{ marginBottom: '10px' }}
-        />
-        {formData.isPack && (
-          <>
+
+      <form onSubmit={handleSubmit}>
+        <Grid container spacing={2}>
+          {/* Primera fila */}
+          <Grid item xs={12} md={6}>
             <TextField
-              label="ID del producto en el pack"
-              type="number"
-              name="productInPackId"
-              value={formData.productInPackId}
+              label="Nombre del producto"
+              name="nombre"
+              value={formData.nombre}
               onChange={handleChange}
               fullWidth
-              margin="normal"
-              style={{ marginBottom: '10px' }}
+              required
             />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={formData.isPack}
+                  onChange={handleCheckboxChange}
+                  name="isPack"
+                />
+              }
+              label="Es paquete"
+              style={{ marginTop: '15px' }}
+            />
+          </Grid>
+
+          {/* Segunda fila */}
+          <Grid item xs={12} md={6}>
+            <FormControl fullWidth>
+              <InputLabel>Categoría</InputLabel>
+              <Select
+                name="categoriaId"
+                value={formData.categoriaId}
+                onChange={handleChange}
+                required
+              >
+                {categorias.map((categoria) => (
+                  <MenuItem key={categoria.id} value={categoria.id}>
+                    {categoria.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <FormControl fullWidth>
+              <InputLabel>Marca</InputLabel>
+              <Select
+                name="marcaId"
+                value={formData.marcaId}
+                onChange={handleChange}
+                required
+              >
+                {marcas.map((marca) => (
+                  <MenuItem key={marca.id} value={marca.id}>
+                    {marca.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+
+          {/* Tercera fila - Descripción que abarca todo el ancho */}
+          <Grid item xs={12}>
             <TextField
-              label="Unidades en el pack"
-              type="number"
-              name="packUnits"
-              value={formData.packUnits}
+              label="Descripción"
+              name="descripcion"
+              value={formData.descripcion}
               onChange={handleChange}
               fullWidth
-              margin="normal"
-              style={{ marginBottom: '10px' }}
+              multiline
+              rows={3}
+              required
             />
-          </>
-        )}
-        <Button
-          variant="contained"
-          color="primary"
-          type="submit"
-          style={{ marginTop: '10px' }}
-        >
-          Registrar Producto
-        </Button>
+          </Grid>
+
+          {/* Campos adicionales que aparecen solo si es paquete */}
+          {formData.isPack && (
+            <>
+              <Grid item xs={12} md={6}>
+                <TextField
+                  label="Unidades en paquete"
+                  name="unidadesPack"
+                  type="number"
+                  value={formData.unidadesPack}
+                  onChange={handleChange}
+                  fullWidth
+                  required={formData.isPack}
+                />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <FormControl fullWidth>
+                  <InputLabel>Producto en paquete</InputLabel>
+                  <Select
+                    name="productoEnPackId"
+                    value={formData.productoEnPackId}
+                    onChange={handleChange}
+                    required={formData.isPack}
+                  >
+                    {/* Aquí deberías mapear los productos disponibles */}
+                  </Select>
+                </FormControl>
+              </Grid>
+            </>
+          )}
+
+          {/* Botón de submit */}
+          <Grid item xs={12}>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              style={{ marginTop: '20px' }}
+            >
+              Registrar Producto
+            </Button>
+          </Grid>
+        </Grid>
       </form>
     </Paper>
   );
 };
 
-export default ProductoRegistro;
+export default ProductosRegistro;
