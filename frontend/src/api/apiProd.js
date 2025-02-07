@@ -5,7 +5,7 @@ const API_BASE_URL = 'https://mte-api.onrender.com/api';
 // Common configuration for requests
 const axiosConfig = {
   headers: {
-    'Content-Type': 'application/json',
+    'Content-Type': 'application/json'
   },
 };
 
@@ -16,62 +16,22 @@ const handleError = (operation, error) => {
 };
 
 const apiProd = {
-  // Endpoints for Product Categories
-  obtenerCategorias: async () => {
-    try {
-      const response = await axios.get(`${API_BASE_URL}/product-category/all`, axiosConfig);
-      console.log('Get Categories:', response.data);
-      return response.data;
-    } catch (error) {
-      handleError('obtenerCategorias', error);
-    }
-  },
-
-  agregarCategoria: async (categoriaData) => {
-    try {
-      await axios.post(`${API_BASE_URL}/product-category`, categoriaData, axiosConfig);
-      return await apiProd.obtenerCategorias(); // Obtener lista actualizada
-    } catch (error) {
-      handleError('agregarCategoria', error);
-    }
-  },
-
-  actualizarCategoria: async (categoriaData) => {
-    try {
-      await axios.put(`${API_BASE_URL}/product-category`, categoriaData, axiosConfig);
-      return await apiProd.obtenerCategorias(); // Obtener lista actualizada
-    } catch (error) {
-      handleError('actualizarCategoria', error);
-    }
-  },
-
-  eliminarCategoria: async (categoriaId) => {
-    try {
-      await axios.delete(`${API_BASE_URL}/product-category`, {
-        headers: axiosConfig.headers,
-        data: { id: categoriaId }
-      });
-      return await apiProd.obtenerCategorias(); // Obtener lista actualizada
-    } catch (error) {
-      handleError('eliminarCategoria', error);
-    }
-  },
-
   // Endpoints for Products
   obtenerProductos: async () => {
     try {
       const response = await axios.get(`${API_BASE_URL}/products`, axiosConfig);
-      console.log('Productos obtenidos:', response.data); // Para verificar la estructura de datos
-      return response.data;
+      return response.data || [];
     } catch (error) {
+      console.error('Error detallado:', error.response?.data);
       handleError('obtenerProductos', error);
+      return [];
     }
   },
 
   agregarProducto: async (productoData) => {
     try {
       await axios.post(`${API_BASE_URL}/products`, productoData, axiosConfig);
-      return await apiProd.obtenerProductos(); // Obtener lista actualizada
+      return await apiProd.obtenerProductos();
     } catch (error) {
       handleError('agregarProducto', error);
     }
@@ -80,7 +40,7 @@ const apiProd = {
   actualizarProducto: async (productoData) => {
     try {
       await axios.put(`${API_BASE_URL}/products`, productoData, axiosConfig);
-      return await apiProd.obtenerProductos(); // Obtener lista actualizada
+      return await apiProd.obtenerProductos();
     } catch (error) {
       handleError('actualizarProducto', error);
     }
@@ -92,9 +52,49 @@ const apiProd = {
         headers: axiosConfig.headers,
         data: { id: productoId }
       });
-      return await apiProd.obtenerProductos(); // Obtener lista actualizada
+      return await apiProd.obtenerProductos();
     } catch (error) {
       handleError('eliminarProducto', error);
+    }
+  },
+
+  // Endpoints for Product Categories
+  obtenerCategorias: async () => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/product-category/all`, axiosConfig);
+      return response.data;
+    } catch (error) {
+      handleError('obtenerCategorias', error);
+    }
+  },
+
+  agregarCategoria: async (categoriaData) => {
+    try {
+      await axios.post(`${API_BASE_URL}/product-category`, categoriaData, axiosConfig);
+      return await apiProd.obtenerCategorias();
+    } catch (error) {
+      handleError('agregarCategoria', error);
+    }
+  },
+
+  actualizarCategoria: async (categoriaData) => {
+    try {
+      await axios.put(`${API_BASE_URL}/product-category`, categoriaData, axiosConfig);
+      return await apiProd.obtenerCategorias();
+    } catch (error) {
+      handleError('actualizarCategoria', error);
+    }
+  },
+
+  eliminarCategoria: async (categoriaId) => {
+    try {
+      await axios.delete(`${API_BASE_URL}/product-category`, {
+        headers: axiosConfig.headers,
+        data: { id: categoriaId }
+      });
+      return await apiProd.obtenerCategorias();
+    } catch (error) {
+      handleError('eliminarCategoria', error);
     }
   },
 

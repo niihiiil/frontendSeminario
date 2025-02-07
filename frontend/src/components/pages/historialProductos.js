@@ -6,28 +6,19 @@ import apiProd from '../../api/apiProd';
 
 const ProductosPage = () => {
   const [productos, setProductos] = useState([]);
-  const [categorias, setCategorias] = useState([]);
-  const [marcas, setMarcas] = useState([]);
   const [editingProducto, setEditingProducto] = useState(null);
 
   useEffect(() => {
-    cargarDatos();
+    cargarProductos();
   }, []);
 
-  const cargarDatos = async () => {
+  const cargarProductos = async () => {
     try {
-      const [productosData, categoriasData, marcasData] = await Promise.all([
-        apiProd.obtenerProductos(),
-        apiProd.obtenerCategorias(),
-        apiProd.obtenerMarcas()
-      ]);
-      
-      console.log('Datos de productos:', productosData);
-      setProductos(productosData);
-      setCategorias(categoriasData);
-      setMarcas(marcasData);
+      const productosData = await apiProd.obtenerProductos();
+      const productosOrdenados = productosData.sort((a, b) => a.id - b.id);
+      setProductos(productosOrdenados);
     } catch (error) {
-      console.error('Error al cargar datos:', error);
+      console.error('Error al obtener productos:', error);
     }
   };
 
@@ -41,9 +32,10 @@ const ProductosPage = () => {
 
   const handleGuardarEdicion = async (editedProducto) => {
     try {
-      await apiProd.actualizarProducto(editedProducto);
-      console.log('Producto actualizado exitosamente:', editedProducto);
-      cargarDatos();
+      const productosActualizados = await apiProd.actualizarProducto(editedProducto);
+      const productosOrdenados = productosActualizados.sort((a, b) => a.id - b.id);
+      setProductos(productosOrdenados);
+      setEditingProducto(null);
     } catch (error) {
       console.error('Error al actualizar producto:', error);
     }
@@ -51,13 +43,9 @@ const ProductosPage = () => {
 
   const handleEliminarProducto = async (productoId) => {
     try {
-      const response = await apiProd.eliminarProducto(productoId);
-      if (response.status === 200) {
-        console.log('Producto eliminado exitosamente:', productoId);
-        cargarDatos();
-      } else {
-        console.error('Error al eliminar producto:', response.statusText);
-      }
+      const productosActualizados = await apiProd.eliminarProducto(productoId);
+      const productosOrdenados = productosActualizados.sort((a, b) => a.id - b.id);
+      setProductos(productosOrdenados);
     } catch (error) {
       console.error('Error al eliminar producto:', error);
     }
@@ -68,21 +56,25 @@ const ProductosPage = () => {
       <h1>Productos</h1>
       {(editingProducto || !editingProducto) && (
         <ProductosRegistro
-          categorias={categorias}
-          marcas={marcas}
+          categorias={productos.map(p => p.productCategory).filter(Boolean)}
+          marcas={productos.map(p => p.brand).filter(Boolean)}
           onSubmit={async (formData) => {
             try {
-              await apiProd.agregarProducto({
+              const productosActualizados = await apiProd.agregarProducto({
                 name: formData.nombre,
                 description: formData.descripcion,
                 isPack: formData.isPack,
-                productCategoryId: formData.categoriaId,
-                brandId: formData.marcaId,
-                productInPackId: formData.productoEnPackId,
-                packUnits: formData.unidadesPack
+                productCategory: {
+                  id: formData.categoriaId
+                },
+                productInPack: formData.isPack ? formData.productoEnPackId : null,
+                packUnits: formData.isPack ? formData.unidadesPack : 0,
+                brand: {
+                  id: formData.marcaId
+                }
               });
-              console.log('Producto registrado exitosamente:', formData);
-              cargarDatos();
+              const productosOrdenados = productosActualizados.sort((a, b) => a.id - b.id);
+              setProductos(productosOrdenados);
             } catch (error) {
               console.error('Error al agregar producto:', error.message);
             }
@@ -92,8 +84,6 @@ const ProductosPage = () => {
       )}
       <TablaProductos
         productos={productos}
-        categorias={categorias}
-        marcas={marcas}
         onEditarClick={handleEditarClick}
         onEliminarClick={handleEliminarProducto}
         handleGuardarEdicion={handleGuardarEdicion}

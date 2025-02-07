@@ -1,96 +1,68 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import MainPageContainer from '../layout/mainpagecontainer';
-import { Card, CardContent, Typography, Button, ButtonGroup } from '@mui/material';
-import { Storefront, Assignment, History } from '@mui/icons-material';
-import { Link } from 'react-router-dom';
-
+import { Grid, Card, CardContent, Typography, CardActionArea } from '@mui/material';
+import { 
+  Inventory, 
+  Category, 
+  History,
+  BrandingWatermark
+} from '@mui/icons-material';
 
 const ProductosPage = () => {
-    const cardStyle = {
-      width: '200px',
-      height: '250px',
-      display: 'flex',
-      flexDirection: 'column',
-    };
-  
-    const contentStyle = {
-      flexGrow: 1,
-      padding: '16px',
-    };
-  
-    const buttonGroupStyle = {
-      borderTop: '1px solid #ccc',
-      height: '48px', 
-    };
-  
-    return (
-      <MainPageContainer>
-        <h2>Productos</h2>
-  
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
-          {/* Tarjeta para la gestión de categorias*/}
-          <Card style={cardStyle}>
-            <CardContent style={contentStyle}>
-              <Typography variant="h6">Categorias</Typography>
-              <Typography variant="body2">Administra tus categorias y sus detalles</Typography>
-            </CardContent>
-            <ButtonGroup fullWidth style={{ ...buttonGroupStyle }}>
-              <Button
-                component={Link}
-                to="/prodCategoria"
-                variant="contained"
-                color="primary"
-                endIcon={<Storefront />}
-                style={{ flex: 1, borderRadius: '0' }}
-              >
-                Ir a Categorias
-              </Button>
-            </ButtonGroup>
-          </Card>
-  
-          {/* Tarjeta para la unidad de medida */}
-          <Card style={cardStyle}>
-            <CardContent style={contentStyle}>
-              <Typography variant="h6">Marca</Typography>
-              <Typography variant="body2">Administra tus marcas</Typography>
-            </CardContent>
-            <ButtonGroup fullWidth style={{ ...buttonGroupStyle }}>
-              <Button
-                component={Link}
-                to="/marca"
-                variant="contained"
-                color="primary"
-                endIcon={<Assignment />}
-                style={{ flex: 1, borderRadius: '0' }}
-              > 
-                Ir a Marcas
-              </Button>
-            </ButtonGroup>
-          </Card>
+  const history = useHistory();
 
-          {/* Tarjeta para la gestión de productos */}
-          <Card style={cardStyle}>
-            <CardContent style={contentStyle}>
-              <Typography variant="h6">Productos</Typography>
-              <Typography variant="body2">Administra tus productos y sus detalles</Typography>
-            </CardContent>
-            <ButtonGroup fullWidth style={{ ...buttonGroupStyle }}>
-              <Button
-                component={Link}
-                to="/prodHistorial"
-                variant="contained"
-                color="primary"
-                endIcon={<Storefront />}
-                style={{ flex: 1, borderRadius: '0' }}
-              >
-                Ir a Productos
-              </Button>
-            </ButtonGroup>
-          </Card>
-        </div>
-      </MainPageContainer>
-    );
-  };
-  
-  export default ProductosPage;
+  const menuItems = [
+    {
+      title: 'Productos',
+      description: 'Gestión de productos y packs',
+      icon: <Inventory sx={{ fontSize: 60, color: '#1976d2', marginBottom: 2 }} />,
+      path: '/prodHistorial'
+    },
+    {
+      title: 'Categorías',
+      description: 'Gestión de categorías de productos',
+      icon: <Category sx={{ fontSize: 60, color: '#1976d2', marginBottom: 2 }} />,
+      path: '/prodCategoria'
+    },
+    {
+      title: 'Marcas',
+      description: 'Gestión de marcas de productos',
+      icon: <BrandingWatermark sx={{ fontSize: 60, color: '#1976d2', marginBottom: 2 }} />,
+      path: '/marca'
+    },
+    {
+      title: 'Historial',
+      description: 'Historial de cambios en productos',
+      icon: <History sx={{ fontSize: 60, color: '#1976d2', marginBottom: 2 }} />,
+      path: '/prodHistorial'
+    }
+  ];
+
+  return (
+    <MainPageContainer>
+      <Grid container spacing={3} sx={{ marginBottom: 3 }}>
+        {menuItems.map((item, index) => (
+          <Grid item xs={12} sm={6} md={3} key={index}>
+            <Card sx={{ height: '100%' }}>
+              <CardActionArea onClick={() => history.push(item.path)}>
+                <CardContent sx={{ textAlign: 'center', padding: 3 }}>
+                  {item.icon}
+                  <Typography variant="h5" component="div" gutterBottom>
+                    {item.title}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {item.description}
+                  </Typography>
+                </CardContent>
+              </CardActionArea>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
+    </MainPageContainer>
+  );
+};
+
+export default ProductosPage;
   

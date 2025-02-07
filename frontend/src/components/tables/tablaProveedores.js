@@ -14,40 +14,14 @@ import {
   DialogActions,
   TextField,
 } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+import { getTableStyles } from '../../styles/tableStyles';
 
 const TablaProveedores = ({ proveedores, onEditarClick, onEliminarClick, handleGuardarEdicion }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedProveedor, setSelectedProveedor] = useState(null);
-
-  const headerCellStyle = {
-    fontSize: '15px',
-    fontWeight: 'bold',
-    color: 'white',
-    textAlign: 'left',
-    padding: '16px',
-    paddingLeft: '20px'
-  };
-
-  const rowStyles = {
-    background: '#2196f3',
-  };
-
-  const bodyCellStyle = {
-    fontSize: '14px',
-    textAlign: 'left',
-    padding: '16px',
-    paddingLeft: '20px'
-  };
-
-  const actionsCellStyle = {
-    ...bodyCellStyle,
-    paddingLeft: '15px'
-  };
-
-  const buttonStyles = {
-    fontSize: '12px',
-    marginRight: '8px',
-  };
+  const theme = useTheme();
+  const styles = getTableStyles(theme);
 
   const handleEditClick = (proveedor) => {
     setSelectedProveedor(proveedor);
@@ -73,27 +47,27 @@ const TablaProveedores = ({ proveedores, onEditarClick, onEliminarClick, handleG
 
   return (
     <>
-      <TableContainer component={Paper} style={{ marginTop: '20px', margin: 'auto' }}>
+      <TableContainer component={Paper} sx={styles.tableContainerStyles}>
         <Table>
           <TableHead>
-            <TableRow style={rowStyles}>
-              <TableCell style={headerCellStyle}>Nombre</TableCell>
-              <TableCell style={headerCellStyle}>RUC</TableCell>
-              <TableCell style={headerCellStyle}>Acciones</TableCell>
+            <TableRow>
+              <TableCell style={styles.headerCellStyle}>Nombre</TableCell>
+              <TableCell style={styles.headerCellStyle}>RUC</TableCell>
+              <TableCell style={styles.headerCellStyle}>Acciones</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {proveedores.map((proveedor, index) => (
-              <TableRow key={index} style={{ background: index % 2 === 0 ? '#f9f9f9' : 'white' }}>
-                <TableCell style={bodyCellStyle}>{proveedor.name}</TableCell>
-                <TableCell style={bodyCellStyle}>{proveedor.ruccode}</TableCell>
-                <TableCell style={actionsCellStyle}>
+              <TableRow key={index} sx={styles.rowStyles}>
+                <TableCell style={styles.bodyCellStyle}>{proveedor.name}</TableCell>
+                <TableCell style={styles.bodyCellStyle}>{proveedor.ruccode}</TableCell>
+                <TableCell style={styles.actionsCellStyle}>
                   <Button
                     onClick={() => handleEditClick(proveedor)}
                     variant="contained"
                     color="primary"
                     size="small"
-                    style={buttonStyles}
+                    style={styles.buttonStyles}
                   >
                     Editar
                   </Button>
@@ -102,7 +76,7 @@ const TablaProveedores = ({ proveedores, onEditarClick, onEliminarClick, handleG
                     variant="contained"
                     color="error"
                     size="small"
-                    style={buttonStyles}
+                    style={styles.buttonStyles}
                   >
                     Eliminar
                   </Button>

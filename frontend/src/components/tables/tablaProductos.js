@@ -15,36 +15,49 @@ import {
   TextField,
   Checkbox,
   FormControlLabel,
-  MenuItem,
 } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+import { alpha } from '@mui/material/styles';
 
-const TablaProductos = ({ productos, categorias, marcas, onEditarClick, handleGuardarEdicion, onEliminarClick }) => {
+const TablaProductos = ({ productos = [], categorias, marcas, onEditarClick, handleGuardarEdicion, onEliminarClick }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedProducto, setSelectedProducto] = useState(null);
+  const theme = useTheme();
 
   const headerCellStyle = {
     fontSize: '15px',
     fontWeight: 'bold',
-    color: 'white',
+    color: theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.common.black,
     textAlign: 'left',
     padding: '16px',
-    paddingLeft: '20px'
+    paddingLeft: '20px',
+    backgroundColor: theme.palette.primary.main,
   };
 
   const rowStyles = {
-    background: '#2196f3',
+    '&:nth-of-type(odd)': {
+      backgroundColor: theme.palette.mode === 'dark' 
+        ? alpha(theme.palette.primary.main, 0.15)
+        : alpha(theme.palette.primary.main, 0.05),
+    },
+    '&:hover': {
+      backgroundColor: theme.palette.mode === 'dark'
+        ? alpha(theme.palette.primary.main, 0.25)
+        : alpha(theme.palette.primary.main, 0.1),
+    },
   };
 
   const bodyCellStyle = {
     fontSize: '14px',
     textAlign: 'left',
     padding: '16px',
-    paddingLeft: '20px'
+    paddingLeft: '20px',
+    color: theme.palette.text.primary,
   };
 
   const actionsCellStyle = {
     ...bodyCellStyle,
-    paddingLeft: '15px'
+    paddingLeft: '15px',
   };
 
   const buttonStyles = {
@@ -80,10 +93,18 @@ const TablaProductos = ({ productos, categorias, marcas, onEditarClick, handleGu
 
   return (
     <>
-      <TableContainer component={Paper} style={{ marginTop: '20px', margin: 'auto' }}>
+      <TableContainer 
+        component={Paper} 
+        sx={{ 
+          marginTop: '20px', 
+          margin: 'auto',
+          backgroundColor: theme.palette.background.paper,
+          boxShadow: theme.shadows[3],
+        }}
+      >
         <Table>
           <TableHead>
-            <TableRow style={rowStyles}>
+            <TableRow>
               <TableCell style={headerCellStyle}>Nombre</TableCell>
               <TableCell style={headerCellStyle}>Descripción</TableCell>
               <TableCell style={headerCellStyle}>Paquete</TableCell>
@@ -95,8 +116,11 @@ const TablaProductos = ({ productos, categorias, marcas, onEditarClick, handleGu
             </TableRow>
           </TableHead>
           <TableBody>
-            {productos.map((producto, index) => (
-              <TableRow key={index} style={{ background: index % 2 === 0 ? '#f9f9f9' : 'white' }}>
+            {(productos || []).map((producto, index) => (
+              <TableRow 
+                key={index} 
+                sx={rowStyles}
+              >
                 <TableCell style={bodyCellStyle}>{displayValue(producto, 'name')}</TableCell>
                 <TableCell style={bodyCellStyle}>{displayValue(producto, 'description')}</TableCell>
                 <TableCell style={bodyCellStyle}>{producto?.isPack ? 'Sí' : 'No'}</TableCell>

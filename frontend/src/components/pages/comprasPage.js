@@ -1,92 +1,65 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import MainPageContainer from '../layout/mainpagecontainer';
-import { Card, CardContent, Typography, Button, ButtonGroup } from '@mui/material';
-import { Storefront, Assignment, History } from '@mui/icons-material';
-import { Link } from 'react-router-dom';
+import { Grid, Card, CardContent, Typography, CardActionArea } from '@mui/material';
+import { 
+  ShoppingCart, 
+  People, 
+  History,
+  ListAlt
+} from '@mui/icons-material';
 
 const ComprasPage = () => {
-  const cardStyle = {
-    width: '200px',
-    height: '250px',
-    display: 'flex',
-    flexDirection: 'column',
-  };
+  const history = useHistory();
 
-  const contentStyle = {
-    flexGrow: 1,
-    padding: '16px',
-  };
-
-  const buttonGroupStyle = {
-    borderTop: '1px solid #ccc',
-    height: '48px', 
-  };
+  const menuItems = [
+    {
+      title: 'Nueva Compra',
+      description: 'Registrar una nueva compra',
+      icon: <ShoppingCart sx={{ fontSize: 60, color: '#1976d2', marginBottom: 2 }} />,
+      path: '/pedidos'
+    },
+    {
+      title: 'Proveedores',
+      description: 'Gestión de proveedores',
+      icon: <People sx={{ fontSize: 60, color: '#1976d2', marginBottom: 2 }} />,
+      path: '/proveedores'
+    },
+    {
+      title: 'Historial',
+      description: 'Historial de compras realizadas',
+      icon: <History sx={{ fontSize: 60, color: '#1976d2', marginBottom: 2 }} />,
+      path: '/registroCompras'
+    },
+    {
+      title: 'Órdenes',
+      description: 'Gestión de órdenes de compra',
+      icon: <ListAlt sx={{ fontSize: 60, color: '#1976d2', marginBottom: 2 }} />,
+      path: '/pedidos'
+    }
+  ];
 
   return (
     <MainPageContainer>
-      <h2>Compras</h2>
-
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
-        {/* Tarjeta para la gestión de proveedores */}
-        <Card style={cardStyle}>
-          <CardContent style={contentStyle}>
-            <Typography variant="h6">Gestión de Proveedores</Typography>
-            <Typography variant="body2">Administra tus proveedores y sus detalles</Typography>
-          </CardContent>
-          <ButtonGroup fullWidth style={{ ...buttonGroupStyle }}>
-            <Button
-              component={Link}
-              to="/proveedores"
-              variant="contained"
-              color="primary"
-              endIcon={<Storefront />}
-              style={{ flex: 1, borderRadius: '0' }}
-            >
-              Ir a Proveedores
-            </Button>
-          </ButtonGroup>
-        </Card>
-
-        {/* Tarjeta para la gestión de pedidos */}
-        <Card style={cardStyle}>
-          <CardContent style={contentStyle}>
-            <Typography variant="h6">Gestión de Pedidos</Typography>
-            <Typography variant="body2">Administra tus pedidos y su estado</Typography>
-          </CardContent>
-          <ButtonGroup fullWidth style={{ ...buttonGroupStyle }}>
-            <Button
-              component={Link}
-              to="/pedidos"
-              variant="contained"
-              color="primary"
-              endIcon={<Assignment />}
-              style={{ flex: 1, borderRadius: '0' }}
-            >
-              Ir a Pedidos
-            </Button>
-          </ButtonGroup>
-        </Card>
-
-        {/* Tarjeta para ver el historial de compras */}
-        <Card style={cardStyle}>
-          <CardContent style={contentStyle}>
-            <Typography variant="h6">Historial de Compras</Typography>
-            <Typography variant="body2">Accede al historial de todas las compras realizadas</Typography>
-          </CardContent>
-          <ButtonGroup fullWidth style={{ ...buttonGroupStyle }}>
-            <Button
-              component={Link}
-              to="/registroCompras"
-              variant="contained"
-              color="primary"
-              endIcon={<History />}
-              style={{ flex: 1, borderRadius: '0' }}
-            >
-              Ver Historial
-            </Button>
-          </ButtonGroup>
-        </Card>
-      </div>
+      <Grid container spacing={3} sx={{ marginBottom: 3 }}>
+        {menuItems.map((item, index) => (
+          <Grid item xs={12} sm={6} md={3} key={index}>
+            <Card sx={{ height: '100%' }}>
+              <CardActionArea onClick={() => history.push(item.path)}>
+                <CardContent sx={{ textAlign: 'center', padding: 3 }}>
+                  {item.icon}
+                  <Typography variant="h5" component="div" gutterBottom>
+                    {item.title}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {item.description}
+                  </Typography>
+                </CardContent>
+              </CardActionArea>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
     </MainPageContainer>
   );
 };

@@ -1,43 +1,91 @@
 import React from 'react';
-import { Card, CardContent, Typography, Button, ButtonGroup } from '@mui/material';
-import { ShoppingCart, LocalMall, Store, Group, Settings, CreditCard } from '@mui/icons-material';
-import { Link } from 'react-router-dom';
-
+import { useHistory } from 'react-router-dom';
+import { Grid, Card, CardContent, Typography, CardActionArea } from '@mui/material';
+import { 
+  ShoppingCart, 
+  LocalMall, 
+  Store, 
+  Person, 
+  Inventory,
+  Assessment,
+  People,
+  Receipt
+} from '@mui/icons-material';
 
 const MainPageContent = () => {
-  const cardData = [
-    { title: 'Compras', description: 'Gestión de compras, proveedores, facturas de compra', link: '/compras', icon: <ShoppingCart /> },
-    { title: 'Ventas', description: 'Gestión de facturas, créditos, clientes', link: '/ventas', icon: <LocalMall /> },
-    { title: 'Inventario', description: 'Control de bodega, productos, categorías', link: '/inventario', icon: <Store /> },
-    { title: 'Usuarios', description: 'Registro y modificación de usuarios, roles y la información de los empleados', link: '/usuarios', icon: <Group /> },
-    { title: 'Config', description: 'Ajustes y configuración del sistema', link: '/configuracion', icon: <Settings /> },
-    { title: 'Productos', description: 'Categorias de productos y unidades de medidas', link: '/productos', icon: <CreditCard /> }
-    //Agregar mas s tarjetas
+  const history = useHistory();
+
+  const menuItems = [
+    {
+      title: 'Compras',
+      description: 'Gestión de compras y proveedores',
+      icon: <ShoppingCart sx={{ fontSize: 60, color: '#1976d2', marginBottom: 2 }} />,
+      path: '/compras'
+    },
+    {
+      title: 'Ventas',
+      description: 'Gestión de ventas y clientes',
+      icon: <LocalMall sx={{ fontSize: 60, color: '#1976d2', marginBottom: 2 }} />,
+      path: '/ventas'
+    },
+    {
+      title: 'Inventario',
+      description: 'Control de inventario y stock',
+      icon: <Store sx={{ fontSize: 60, color: '#1976d2', marginBottom: 2 }} />,
+      path: '/inventario'
+    },
+    {
+      title: 'Personal',
+      description: 'Gestión de usuarios y empleados',
+      icon: <Person sx={{ fontSize: 60, color: '#1976d2', marginBottom: 2 }} />,
+      path: '/personal'
+    },
+    {
+      title: 'Productos',
+      description: 'Gestión de productos y categorías',
+      icon: <Inventory sx={{ fontSize: 60, color: '#1976d2', marginBottom: 2 }} />,
+      path: '/productos'
+    },
+    {
+      title: 'Reportes',
+      description: 'Informes y estadísticas',
+      icon: <Assessment sx={{ fontSize: 60, color: '#1976d2', marginBottom: 2 }} />,
+      path: '/reportes'
+    },
+    {
+      title: 'Clientes',
+      description: 'Gestión de clientes',
+      icon: <People sx={{ fontSize: 60, color: '#1976d2', marginBottom: 2 }} />,
+      path: '/clientes'
+    },
+    {
+      title: 'Facturas',
+      description: 'Gestión de facturas',
+      icon: <Receipt sx={{ fontSize: 60, color: '#1976d2', marginBottom: 2 }} />,
+      path: '/facturas'
+    }
   ];
 
   return (
-    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
-      {cardData.map((card, index) => (
-        <Card key={index} style={{ width: '200px', height: '250px', display: 'flex', flexDirection: 'column' }}>
-          <CardContent style={{ flexGrow: 1 }}>
-            <Typography variant="h6">{card.title}</Typography>
-            <Typography variant="body2">{card.description}</Typography>
-          </CardContent>
-          <ButtonGroup fullWidth style={{ borderTop: '1px solid #ccc' }}>
-            <Button
-              component={Link}
-              to={card.link}
-              variant="contained"
-              color="primary"
-              endIcon={card.icon}
-              style={{ flex: 1, borderRadius: '0' }}
-            >
-              Ir a {card.title}
-            </Button>
-          </ButtonGroup>
-        </Card>
+    <Grid container spacing={3} sx={{ padding: 3 }}>
+      {menuItems.map((item, index) => (
+        <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
+          <Card sx={{ height: '100%' }}>
+            <CardActionArea onClick={() => history.push(item.path)}>
+              <CardContent sx={{ textAlign: 'center', padding: 3 }}>
+                {item.icon}
+                <Typography variant="h5" component="div" gutterBottom>
+                  {item.title}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {item.description}
+                </Typography>
+              </CardContent>
+            </CardActionArea>
+          </Card>
+        </Grid>
       ))}
-    </div>
+    </Grid>
   );
 };
 

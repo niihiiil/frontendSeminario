@@ -1,75 +1,65 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import MainPageContainer from '../layout/mainpagecontainer';
-import { Card, CardContent, Typography, Button, ButtonGroup } from '@mui/material';
-import { Person, Description, History } from '@mui/icons-material';  
-import { Link } from 'react-router-dom';
+import { Grid, Card, CardContent, Typography, CardActionArea } from '@mui/material';
+import { 
+  LocalMall, 
+  People, 
+  History,
+  Receipt
+} from '@mui/icons-material';
 
 const VentasPage = () => {
+  const history = useHistory();
+
+  const menuItems = [
+    {
+      title: 'Nueva Venta',
+      description: 'Registrar una nueva venta',
+      icon: <LocalMall sx={{ fontSize: 60, color: '#1976d2', marginBottom: 2 }} />,
+      path: '/facturas'
+    },
+    {
+      title: 'Clientes',
+      description: 'Gestión de clientes',
+      icon: <People sx={{ fontSize: 60, color: '#1976d2', marginBottom: 2 }} />,
+      path: '/clientes'
+    },
+    {
+      title: 'Historial',
+      description: 'Historial de ventas realizadas',
+      icon: <History sx={{ fontSize: 60, color: '#1976d2', marginBottom: 2 }} />,
+      path: '/registroVentas'
+    },
+    {
+      title: 'Facturas',
+      description: 'Gestión de facturas',
+      icon: <Receipt sx={{ fontSize: 60, color: '#1976d2', marginBottom: 2 }} />,
+      path: '/facturas'
+    }
+  ];
+
   return (
     <MainPageContainer>
-
-<h2>Ventas</h2>
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
-        {/* Tarjeta para la gestión de clientes */}
-        <Card style={{ width: '200px', height: '250px', display: 'flex', flexDirection: 'column' }}>
-          <CardContent style={{ flexGrow: 1 }}>
-            <Typography variant="h6">Gestión de Clientes</Typography>
-            <Typography variant="body2">Registro y modificación de clientes</Typography>
-          </CardContent>
-          <ButtonGroup fullWidth style={{ borderTop: '1px solid #ccc' }}>
-            <Button
-              component={Link}
-              to="/clientes"
-              variant="contained"
-              color="primary"
-              endIcon={<Person />}
-              style={{ flex: 1, borderRadius: '0' }}
-            >
-              Ir a Clientes
-            </Button>
-          </ButtonGroup>
-        </Card>
-
-        {/* Tarjeta para la gestión de facturas */}
-        <Card style={{ width: '200px', height: '250px', display: 'flex', flexDirection: 'column' }}>
-          <CardContent style={{ flexGrow: 1 }}>
-            <Typography variant="h6">Gestión de Facturas</Typography>
-            <Typography variant="body2">Registro y modificación de facturas</Typography>
-          </CardContent>
-          <ButtonGroup fullWidth style={{ borderTop: '1px solid #ccc' }}>
-            <Button
-              component={Link}
-              to="/facturas"
-              variant="contained"
-              color="primary"
-              endIcon={<Description />}
-              style={{ flex: 1, borderRadius: '0' }}
-            >
-              Ir a Facturas
-            </Button>
-          </ButtonGroup>
-        </Card>
-
-        {/* Tarjeta para la gestión de registros de ventas */}
-        <Card style={{ width: '200px', height: '250px', display: 'flex', flexDirection: 'column' }}>
-          <CardContent style={{ flexGrow: 1 }}>
-            <Typography variant="h6">Registros de Ventas</Typography>
-            <Typography variant="body2">Acceda a todos los registros de ventas</Typography>
-          </CardContent>
-          <ButtonGroup fullWidth style={{ borderTop: '1px solid #ccc' }}>
-            <Button
-              component={Link}
-              to="/registroVentas"
-              variant="contained"
-              color="primary"
-              endIcon={<History />}
-              style={{ flex: 1, borderRadius: '0' }}
-            >
-              Ir a Registros
-            </Button>
-          </ButtonGroup>
-        </Card>
-      </div>
+      <Grid container spacing={3} sx={{ marginBottom: 3 }}>
+        {menuItems.map((item, index) => (
+          <Grid item xs={12} sm={6} md={3} key={index}>
+            <Card sx={{ height: '100%' }}>
+              <CardActionArea onClick={() => history.push(item.path)}>
+                <CardContent sx={{ textAlign: 'center', padding: 3 }}>
+                  {item.icon}
+                  <Typography variant="h5" component="div" gutterBottom>
+                    {item.title}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {item.description}
+                  </Typography>
+                </CardContent>
+              </CardActionArea>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
     </MainPageContainer>
   );
 };

@@ -18,8 +18,10 @@ import HistorialComprasPage from './components/pages/historialComprasPage';
 import ProductosPage from './components/pages/productosPage';
 import MarcaPage from './components/pages/marcaPage';
 import catProdPage from './components/pages/catProdPage';
+import PersonalPage from './components/pages/personalPage';
 import HistorialProductosPage from './components/pages/historialProductos';
 import Error404 from './components/autenticacion/error404';
+import { ThemeContextProvider } from './context/ThemeContext';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -30,8 +32,9 @@ function App() {
 
 
   return (
-    <Router>
-      <Switch>
+    <ThemeContextProvider>
+      <Router>
+        <Switch>
 
           {/* Redirección predeterminada a /login */}
           <Redirect from="/" to="/login" exact />
@@ -58,6 +61,7 @@ function App() {
         <ProtectedRoute path="/usuarios" component={UsuariosPage} isAuthenticated={isAuthenticated} />
         <ProtectedRoute path="/configuracion" component={ConfigPage} isAuthenticated={isAuthenticated} />
         <ProtectedRoute path="/empleados" component={EmpleadosPage} isAuthenticated={isAuthenticated} />
+        <ProtectedRoute path="/personal" component={PersonalPage} isAuthenticated={isAuthenticated} />
 
         <ProtectedRoute path="/productos" component={ProductosPage} isAuthenticated={isAuthenticated} />
         <ProtectedRoute path="/prodHistorial" component={HistorialProductosPage} isAuthenticated={isAuthenticated} />
@@ -73,6 +77,7 @@ function App() {
         <Route render={() => <Redirect to="/error404" />} />
       </Switch>
     </Router>
+    </ThemeContextProvider>
   );
 }
 
