@@ -12,8 +12,6 @@ Sistema de gestión integral desarrollado como Single Page Application (SPA) par
 - **Context API**: Gestión de estado global para temas y autenticación
 
 ### Herramientas de Desarrollo
-- **ESLint**: Herramienta de linting para mantener la calidad del código
 - **Git**: Control de versiones
 - **npm**: Gestor de paquetes
 
-## Estructura del Proyecto
