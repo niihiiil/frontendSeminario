@@ -7,17 +7,20 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Button,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
   TextField,
+  Button,
+  IconButton,
+  Tooltip,
+  useTheme
 } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
+import { Edit, Delete } from '@mui/icons-material';
 import { getTableStyles } from '../../styles/tableStyles';
 
-const TablaProdCategoria = ({ categorias, onEditarClick, onEliminarClick, handleGuardarEdicion }) => {
+const TablaProdCategoria = ({ categorias, onEditarClick, handleGuardarEdicion, onEliminarClick }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedCategoria, setSelectedCategoria] = useState(null);
   const theme = useTheme();
@@ -40,11 +43,6 @@ const TablaProdCategoria = ({ categorias, onEditarClick, onEliminarClick, handle
     });
   };
 
-  const handleGuardarClick = () => {
-    handleGuardarEdicion(selectedCategoria);
-    handleCloseModal();
-  };
-
   return (
     <>
       <TableContainer component={Paper} sx={styles.tableContainerStyles}>
@@ -57,29 +55,29 @@ const TablaProdCategoria = ({ categorias, onEditarClick, onEliminarClick, handle
             </TableRow>
           </TableHead>
           <TableBody>
-            {categorias.map((categoria, index) => (
-              <TableRow key={index} sx={styles.rowStyles}>
+            {categorias.map((categoria) => (
+              <TableRow key={categoria.id} sx={styles.rowStyles}>
                 <TableCell style={styles.bodyCellStyle}>{categoria.name}</TableCell>
                 <TableCell style={styles.bodyCellStyle}>{categoria.description}</TableCell>
                 <TableCell style={styles.actionsCellStyle}>
-                  <Button
-                    onClick={() => handleEditClick(categoria)}
-                    variant="contained"
-                    color="primary"
-                    size="small"
-                    style={styles.buttonStyles}
-                  >
-                    Editar
-                  </Button>
-                  <Button
-                    onClick={() => onEliminarClick(categoria.id)}
-                    variant="contained"
-                    color="error"
-                    size="small"
-                    style={styles.buttonStyles}
-                  >
-                    Eliminar
-                  </Button>
+                  <Tooltip title="Editar">
+                    <IconButton 
+                      onClick={() => handleEditClick(categoria)}
+                      color="primary"
+                      size="small"
+                    >
+                      <Edit />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Eliminar">
+                    <IconButton
+                      onClick={() => onEliminarClick(categoria.id)}
+                      color="error"
+                      size="small"
+                    >
+                      <Delete />
+                    </IconButton>
+                  </Tooltip>
                 </TableCell>
               </TableRow>
             ))}
@@ -111,7 +109,7 @@ const TablaProdCategoria = ({ categorias, onEditarClick, onEliminarClick, handle
           <Button onClick={handleCloseModal} color="secondary">
             Cancelar
           </Button>
-          <Button onClick={handleGuardarClick} color="primary">
+          <Button onClick={() => { handleGuardarEdicion(selectedCategoria); handleCloseModal(); }} color="primary">
             Guardar
           </Button>
         </DialogActions>

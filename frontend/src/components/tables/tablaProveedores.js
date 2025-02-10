@@ -13,11 +13,14 @@ import {
   DialogContent,
   DialogActions,
   TextField,
+  IconButton,
+  Tooltip,
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { getTableStyles } from '../../styles/tableStyles';
+import { Edit, Delete } from '@mui/icons-material';
 
-const TablaProveedores = ({ proveedores, onEditarClick, onEliminarClick, handleGuardarEdicion }) => {
+const TablaProveedores = ({ proveedores, onEditar, onEliminar, handleGuardarEdicion }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedProveedor, setSelectedProveedor] = useState(null);
   const theme = useTheme();
@@ -57,29 +60,29 @@ const TablaProveedores = ({ proveedores, onEditarClick, onEliminarClick, handleG
             </TableRow>
           </TableHead>
           <TableBody>
-            {proveedores.map((proveedor, index) => (
-              <TableRow key={index} sx={styles.rowStyles}>
+            {proveedores.map((proveedor) => (
+              <TableRow key={proveedor.id} sx={styles.rowStyles}>
                 <TableCell style={styles.bodyCellStyle}>{proveedor.name}</TableCell>
                 <TableCell style={styles.bodyCellStyle}>{proveedor.ruccode}</TableCell>
                 <TableCell style={styles.actionsCellStyle}>
-                  <Button
-                    onClick={() => handleEditClick(proveedor)}
-                    variant="contained"
-                    color="primary"
-                    size="small"
-                    style={styles.buttonStyles}
-                  >
-                    Editar
-                  </Button>
-                  <Button
-                    onClick={() => onEliminarClick(proveedor.id)}
-                    variant="contained"
-                    color="error"
-                    size="small"
-                    style={styles.buttonStyles}
-                  >
-                    Eliminar
-                  </Button>
+                  <Tooltip title="Editar">
+                    <IconButton 
+                      onClick={() => handleEditClick(proveedor)}
+                      color="primary"
+                      size="small"
+                    >
+                      <Edit />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Eliminar">
+                    <IconButton
+                      onClick={() => onEliminar(proveedor.id)}
+                      color="error"
+                      size="small"
+                    >
+                      <Delete />
+                    </IconButton>
+                  </Tooltip>
                 </TableCell>
               </TableRow>
             ))}

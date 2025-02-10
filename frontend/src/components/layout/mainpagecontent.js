@@ -8,8 +8,7 @@ import {
   Person, 
   Inventory,
   Assessment,
-  People,
-  Receipt
+  People
 } from '@mui/icons-material';
 
 const MainPageContent = () => {
@@ -57,12 +56,6 @@ const MainPageContent = () => {
       description: 'Gestión de clientes',
       icon: <People sx={{ fontSize: 60, color: '#1976d2', marginBottom: 2 }} />,
       path: '/clientes'
-    },
-    {
-      title: 'Facturas',
-      description: 'Gestión de facturas',
-      icon: <Receipt sx={{ fontSize: 60, color: '#1976d2', marginBottom: 2 }} />,
-      path: '/facturas'
     }
   ];
 

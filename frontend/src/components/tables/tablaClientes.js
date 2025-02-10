@@ -13,28 +13,16 @@ import {
   DialogContent,
   DialogActions,
   TextField,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
+  IconButton,
+  Tooltip,
+  useTheme
 } from '@mui/material';
+import { Edit, Delete } from '@mui/icons-material';
+import { getTableStyles } from '../../styles/tableStyles';
 
 const TablaClientes = ({ clientes, onEditarClick, handleGuardarEdicion, onEliminarClick }) => {
-  const cellStyles = {
-    fontSize: '15px',
-    fontWeight: 'bold',
-    color: 'white',
-  };
-
-  const rowStyles = {
-    background: '#2196f3',
-    color: 'black',
-  };
-
-  const buttonStyles = {
-    fontSize: '12px',
-    marginRight: '5px',
-  };
+  const theme = useTheme();
+  const styles = getTableStyles(theme);
 
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedCliente, setSelectedCliente] = useState(null);
@@ -57,52 +45,47 @@ const TablaClientes = ({ clientes, onEditarClick, handleGuardarEdicion, onElimin
   };
 
   return (
-    <TableContainer component={Paper} style={{ marginTop: '20px', margin: 'auto' }}>
+    <TableContainer component={Paper} sx={styles.tableContainerStyles}>
       <Table>
         <TableHead>
-          <TableRow style={rowStyles}>
-            <TableCell style={cellStyles}>Nombre</TableCell>
-            <TableCell style={cellStyles}>Segundo Nombre</TableCell>
-            <TableCell style={cellStyles}>Apellido Paterno</TableCell>
-            <TableCell style={cellStyles}>Apellido Materno</TableCell>
-            <TableCell style={cellStyles}>Número de Identificación</TableCell>
-            <TableCell style={cellStyles}>Candidato a Crédito</TableCell>
-            <TableCell style={{ ...cellStyles, textAlign: 'center' }}>Acciones</TableCell>
+          <TableRow>
+            <TableCell style={styles.headerCellStyle}>Nombre</TableCell>
+            <TableCell style={styles.headerCellStyle}>Apellido</TableCell>
+            <TableCell style={styles.headerCellStyle}>Identificación</TableCell>
+            <TableCell style={styles.headerCellStyle}>Acciones</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {clientes.map((cliente, index) => (
-            <TableRow key={index} style={{ background: index % 2 === 0 ? '#f9f9f9' : 'white' }}>
-              <TableCell style={{ fontSize: '14px', textAlign: 'center' }}>{cliente.firstName}</TableCell>
-              <TableCell style={{ fontSize: '14px', textAlign: 'center' }}>{cliente.secondName}</TableCell>
-              <TableCell style={{ fontSize: '14px', textAlign: 'center' }}>{cliente.firstLastName}</TableCell>
-              <TableCell style={{ fontSize: '14px', textAlign: 'center' }}>{cliente.secondLastName}</TableCell>
-              <TableCell style={{ fontSize: '14px', textAlign: 'center' }}>{cliente.identificationNumber}</TableCell>
-              <TableCell style={{ fontSize: '14px', textAlign: 'center' }}>{cliente.isCreditCandidate ? 'Sí' : 'No'}</TableCell>
-              <TableCell style={{ textAlign: 'center' }}>
-                <Button
-                  onClick={() => handleEditarClick(cliente)}
-                  variant="contained"
-                  color="primary"
-                  size="small"
-                  style={{ ...buttonStyles }}
-                >
-                  Editar
-                </Button>
-                <Button
-                  onClick={() => onEliminarClick(cliente.id)}
-                  variant="contained"
-                  color="secondary"
-                  size="small"
-                  style={{ ...buttonStyles, backgroundColor: 'red' }}
-                >
-                  Eliminar
-                </Button>
+          {clientes.map((cliente) => (
+            <TableRow key={cliente.id} sx={styles.rowStyles}>
+              <TableCell style={styles.bodyCellStyle}>{cliente.firstName}</TableCell>
+              <TableCell style={styles.bodyCellStyle}>{cliente.firstLastName}</TableCell>
+              <TableCell style={styles.bodyCellStyle}>{cliente.identificationNumber}</TableCell>
+              <TableCell style={styles.actionsCellStyle}>
+                <Tooltip title="Editar">
+                  <IconButton 
+                    onClick={() => handleEditarClick(cliente)}
+                    color="primary"
+                    size="small"
+                  >
+                    <Edit />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Eliminar">
+                  <IconButton
+                    onClick={() => onEliminarClick(cliente.id)}
+                    color="error"
+                    size="small"
+                  >
+                    <Delete />
+                  </IconButton>
+                </Tooltip>
               </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
+
       <Dialog open={modalOpen} onClose={handleCloseModal}>
         <DialogTitle>Editar Cliente</DialogTitle>
         <DialogContent>
@@ -150,22 +133,14 @@ const TablaClientes = ({ clientes, onEditarClick, handleGuardarEdicion, onElimin
               value={selectedCliente ? selectedCliente.identificationNumber : ''}
               onChange={(e) => handleEditFieldChange('identificationNumber', e.target.value)}
             />
-            <FormControl fullWidth variant="outlined" margin="normal">
-              <InputLabel>Candidato a Crédito</InputLabel>
-              <Select
-                value={selectedCliente ? selectedCliente.isCreditCandidate : false}
-                onChange={(e) => handleEditFieldChange('isCreditCandidate', e.target.value)}
-                label="Candidato a Crédito"
-              >
-                <MenuItem value={true}>Sí</MenuItem>
-                <MenuItem value={false}>No</MenuItem>
-              </Select>
-            </FormControl>
           </form>
         </DialogContent>
         <DialogActions>
-          <Button onClick={()=> { console.log(selectedCliente); handleGuardarEdicion(selectedCliente); handleCloseModal(); }} color="primary">
-            Cerrar
+          <Button onClick={handleCloseModal} color="secondary">
+            Cancelar
+          </Button>
+          <Button onClick={()=> { handleGuardarEdicion(selectedCliente); handleCloseModal(); }} color="primary">
+            Guardar
           </Button>
         </DialogActions>
       </Dialog>

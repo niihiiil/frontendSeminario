@@ -7,7 +7,7 @@ import ComprasPage from './components/pages/comprasPage';
 import VentasPage from './components/pages/ventasPage';
 import InventarioPage from './components/pages/inventarioPage';
 import ConfigPage from './components/pages/configPage';
-import EmpleadosPage from './components/pages/empleadoPage';
+import EmpleadosPage from './components/pages/empleadosPage';
 import UsuariosPage from './components/pages/usuariosPage';
 import FacturasPage from './components/pages/facturasPage';
 import ClientesPage from './components/pages/clientesPage';

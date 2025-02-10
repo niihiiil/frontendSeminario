@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import MainPageContainer from '../layout/mainpagecontainer';
 import MarcaRegistro from '../forms/marcaRegistro';
-import TablaMarca from '../tables/tablaMarca';
+import TablaMarca from '../tables/tablaMarcas';
 import apiProd from '../../api/apiProd';
 
 const MarcaPage = () => {
