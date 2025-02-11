@@ -2,6 +2,11 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 
 class EntityClass {
+  static estados = {
+    DISPONIBLE: 'Disponible',
+    DADO_DE_BAJA: 'Dado de baja'
+  };
+
   static async login({ email, password }) {
     try {
       const response = await axios.post('https://mte-api.onrender.com/api/authentication/login', {
@@ -56,7 +61,5 @@ class EntityClass {
     }
   }
 }
-
-
 
 export default EntityClass;

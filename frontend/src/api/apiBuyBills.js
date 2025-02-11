@@ -109,14 +109,15 @@ const apiBuyBills = {
 
   crearPedido: async (pedidoData) => {
     try {
+      console.log('Datos enviados al API:', pedidoData);
       const response = await axios.post(
-        `${API_BASE_URL}/buy-bills`, 
-        pedidoData, 
+        `${API_BASE_URL}/buy-bills`,
+        pedidoData,
         axiosConfig
       );
       return response.data;
     } catch (error) {
-      console.error('Error al crear pedido:', error);
+      console.error('Error en la llamada al API:', error.response?.data);
       throw error;
     }
   },
@@ -144,6 +145,35 @@ const apiBuyBills = {
       return response.data;
     } catch (error) {
       console.error('Error al obtener detalles de pedido:', error);
+      throw error;
+    }
+  },
+
+  actualizarPedido: async (pedidoData) => {
+    try {
+      console.log('Actualizando pedido:', pedidoData);
+      const response = await axios.put(
+        `${API_BASE_URL}/buy-bills`,
+        pedidoData,
+        axiosConfig
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error al actualizar pedido:', error.response?.data);
+      throw error;
+    }
+  },
+
+  eliminarPedido: async (pedidoId) => {
+    try {
+      console.log('Eliminando pedido:', pedidoId);
+      const response = await axios.delete(
+        `${API_BASE_URL}/buy-bills?request=${pedidoId}`,
+        axiosConfig
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error al eliminar pedido:', error.response?.data);
       throw error;
     }
   }

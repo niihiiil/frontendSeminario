@@ -10,12 +10,22 @@ import {
   IconButton,
   Tooltip,
   useTheme,
-  Typography
+  Typography,
+  Box
 } from '@mui/material';
-import { Visibility, Delete } from '@mui/icons-material';
+import { 
+  RemoveRedEye as ViewIcon, 
+  Edit as EditIcon,
+  Delete as DeleteIcon 
+} from '@mui/icons-material';
 import { getTableStyles } from '../../styles/tableStyles';
 
-const TablaTransaccionesCompra = ({ transacciones, onVerDetalle, onEliminar }) => {
+const TablaTransaccionesCompra = ({ 
+  transacciones, 
+  onVerDetalle, 
+  onEditar,
+  onEliminar 
+}) => {
   const theme = useTheme();
   const styles = getTableStyles(theme);
 
@@ -59,7 +69,9 @@ const TablaTransaccionesCompra = ({ transacciones, onVerDetalle, onEliminar }) =
             <TableCell style={styles.headerCellStyle}>Descuento</TableCell>
             <TableCell style={styles.headerCellStyle}>IVA</TableCell>
             <TableCell style={styles.headerCellStyle}>Total</TableCell>
-            <TableCell style={styles.headerCellStyle}>Acciones</TableCell>
+            <TableCell style={styles.headerCellStyle} align="center">
+              Acciones
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -89,27 +101,40 @@ const TablaTransaccionesCompra = ({ transacciones, onVerDetalle, onEliminar }) =
               <TableCell style={styles.bodyCellStyle}>
                 {formatCurrency(transaccion.total)}
               </TableCell>
-              <TableCell style={styles.actionsCellStyle}>
-                <Tooltip title="Ver detalles">
-                  <IconButton 
-                    onClick={() => onVerDetalle(transaccion)}
-                    color="primary"
-                    size="small"
-                  >
-                    <Visibility />
-                  </IconButton>
-                </Tooltip>
-                {transaccion.isDeletable && (
-                  <Tooltip title="Eliminar">
+              <TableCell style={styles.bodyCellStyle} align="center">
+                <Box sx={{ display: 'inline-flex', gap: 1, justifyContent: 'center' }}>
+                  <Tooltip title="Ver detalles">
+                    <IconButton 
+                      onClick={() => onVerDetalle(transaccion)}
+                      color="info"
+                      size="small"
+                    >
+                      <ViewIcon fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Editar compra">
+                    <IconButton 
+                      onClick={() => onEditar(transaccion)}
+                      color="primary"
+                      size="small"
+                    >
+                      <EditIcon fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Eliminar compra">
                     <IconButton
-                      onClick={() => onEliminar(transaccion.id)}
+                      onClick={() => {
+                        if (window.confirm('¿Está seguro de eliminar esta compra?')) {
+                          onEliminar(transaccion.id);
+                        }
+                      }}
                       color="error"
                       size="small"
                     >
-                      <Delete />
+                      <DeleteIcon fontSize="small" />
                     </IconButton>
                   </Tooltip>
-                )}
+                </Box>
               </TableCell>
             </TableRow>
           ))}

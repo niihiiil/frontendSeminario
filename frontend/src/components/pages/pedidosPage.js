@@ -44,27 +44,35 @@ const PedidosPage = () => {
 
   const handleSubmit = async (formData) => {
     try {
-      // Primero creamos el pedido
-      const pedidoResponse = await apiBuyBills.crearPedido({
+      console.log('Datos recibidos en pedidosPage:', formData);
+      
+      // Asegurarnos de que el formato sea exactamente el esperado
+      const pedidoFormateado = {
         suplierId: formData.suplierId,
-        employeeId: formData.employeeId
-      });
+        employeeId: formData.employeeId,
+        details: formData.details.map(detail => ({
+          units: detail.units,
+          pricePerUnit: detail.pricePerUnit,
+          discountAmount: detail.discountAmount,
+          ivaAmount: detail.ivaAmount,
+          isBonus: detail.isBonus,
+          productId: detail.productId
+        }))
+      };
 
-      // Si el pedido se creó exitosamente, creamos los detalles
-      if (pedidoResponse) {
-        const detalleResponse = await apiBuyBills.crearDetallePedido({
-          suplierId: formData.suplierId,
-          employeeId: formData.employeeId,
-          details: formData.details
-        });
-
-        if (detalleResponse) {
-          mostrarMensaje('Pedido creado exitosamente');
-        }
+      const response = await apiBuyBills.crearPedido(pedidoFormateado);
+      
+      if (response) {
+        mostrarMensaje('Pedido creado exitosamente');
       }
     } catch (error) {
-      console.error('Error al crear el pedido:', error);
-      mostrarMensaje('Error al crear el pedido: ' + error.message, 'error');
+      console.error('Error completo:', error);
+      console.error('Datos del error:', error.response?.data);
+      mostrarMensaje(
+        'Error al crear el pedido: ' + 
+        (error.response?.data?.message || error.message), 
+        'error'
+      );
     }
   };
 

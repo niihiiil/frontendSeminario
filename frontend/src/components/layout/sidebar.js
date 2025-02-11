@@ -30,6 +30,33 @@ const Sidebar = () => {
     history.push('/login');
   };
 
+  const menuItems = [
+    { path: '/compras', icon: <ShoppingCart />, text: 'Compras' },
+    { path: '/ventas', icon: <LocalMall />, text: 'Ventas' },
+    { path: '/inventario', icon: <Inventory />, text: 'Inventario' },
+    { path: '/personal', icon: <Person />, text: 'Personal' },
+    { path: '/productos', icon: <Category />, text: 'Productos' }
+  ];
+
+  const configItems = [
+    { 
+      path: '/configuracion', 
+      icon: <Settings />, 
+      text: 'Configuración',
+      onClick: () => history.push('/configuracion')
+    },
+    {
+      icon: theme.palette.mode === 'dark' ? <Brightness7 /> : <Brightness4 />,
+      text: theme.palette.mode === 'dark' ? 'Modo Claro' : 'Modo Oscuro',
+      onClick: () => colorMode.changeTheme(theme.palette.mode === 'dark' ? 'light' : 'dark')
+    },
+    {
+      icon: <Logout />,
+      text: 'Cerrar Sesión',
+      onClick: handleLogout
+    }
+  ];
+
   return (
     <>
       <IconButton 
@@ -105,71 +132,57 @@ const Sidebar = () => {
         </div>
 
         <List>
-          <ListItem button component={Link} to="/compras">
-            <ListItemIcon>
-              <ShoppingCart sx={{ color: theme.palette.primary.main }} />
-            </ListItemIcon>
-            {isExpanded && <ListItemText primary="Compras" />}
-          </ListItem>
-
-          <ListItem button component={Link} to="/ventas">
-            <ListItemIcon>
-              <LocalMall sx={{ color: theme.palette.primary.main }} />
-            </ListItemIcon>
-            {isExpanded && <ListItemText primary="Ventas" />}
-          </ListItem>
-
-          <ListItem button component={Link} to="/inventario">
-            <ListItemIcon>
-              <Inventory sx={{ color: theme.palette.primary.main }} />
-            </ListItemIcon>
-            {isExpanded && <ListItemText primary="Inventario" />}
-          </ListItem>
-
-          <ListItem button onClick={() => history.push('/personal')}>
-            <ListItemIcon>
-              <Person sx={{ color: theme.palette.primary.main }} />
-            </ListItemIcon>
-            {isExpanded && <ListItemText primary="Personal" />}
-          </ListItem>
-
-          <ListItem button component={Link} to="/productos">
-            <ListItemIcon>
-              <Category sx={{ color: theme.palette.primary.main }} />
-            </ListItemIcon>
-            {isExpanded && <ListItemText primary="Productos" />}
-          </ListItem>
+          {menuItems.map((item) => (
+            <ListItem 
+              button 
+              key={item.path}
+              onClick={() => history.push(item.path)}
+              sx={{
+                minHeight: 48,
+                justifyContent: isExpanded ? 'initial' : 'center',
+                px: 2.5,
+              }}
+            >
+              <ListItemIcon
+                sx={{
+                  minWidth: 0,
+                  mr: isExpanded ? 3 : 'auto',
+                  justifyContent: 'center',
+                  color: theme.palette.primary.main
+                }}
+              >
+                {item.icon}
+              </ListItemIcon>
+              {isExpanded && <ListItemText primary={item.text} />}
+            </ListItem>
+          ))}
         </List>
         <Divider />
         <List>
-          <ListItem button component={Link} to="/configuracion">
-            <ListItemIcon>
-              <Settings sx={{ color: theme.palette.primary.main }} />
-            </ListItemIcon>
-            {isExpanded && <ListItemText primary="Configuración" />}
-          </ListItem>
-          
-          <ListItem button onClick={() => colorMode.changeTheme(theme.palette.mode === 'dark' ? 'light' : 'dark')}>
-            <ListItemIcon>
-              {theme.palette.mode === 'dark' ? (
-                <Brightness7 sx={{ color: theme.palette.primary.main }} />
-              ) : (
-                <Brightness4 sx={{ color: theme.palette.primary.main }} />
-              )}
-            </ListItemIcon>
-            {isExpanded && (
-              <ListItemText 
-                primary={theme.palette.mode === 'dark' ? 'Modo Claro' : 'Modo Oscuro'} 
-              />
-            )}
-          </ListItem>
-
-          <ListItem button onClick={handleLogout}>
-            <ListItemIcon>
-              <Logout sx={{ color: theme.palette.primary.main }} />
-            </ListItemIcon>
-            {isExpanded && <ListItemText primary="Cerrar Sesión" />}
-          </ListItem>
+          {configItems.map((item, index) => (
+            <ListItem
+              button
+              key={index}
+              onClick={item.onClick}
+              sx={{
+                minHeight: 48,
+                justifyContent: isExpanded ? 'initial' : 'center',
+                px: 2.5,
+              }}
+            >
+              <ListItemIcon
+                sx={{
+                  minWidth: 0,
+                  mr: isExpanded ? 3 : 'auto',
+                  justifyContent: 'center',
+                  color: theme.palette.primary.main
+                }}
+              >
+                {item.icon}
+              </ListItemIcon>
+              {isExpanded && <ListItemText primary={item.text} />}
+            </ListItem>
+          ))}
         </List>
         {isExpanded && (
           <div style={{ 

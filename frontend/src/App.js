@@ -22,6 +22,8 @@ import PersonalPage from './components/pages/personalPage';
 import HistorialProductosPage from './components/pages/historialProductos';
 import Error404 from './components/autenticacion/error404';
 import { ThemeContextProvider } from './context/ThemeContext';
+import AgregarInventarioPage from './components/pages/agregarInventarioPage';
+import VerInventarioPage from './components/pages/verInventarioPage';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -67,6 +69,8 @@ function App() {
         <ProtectedRoute path="/prodHistorial" component={HistorialProductosPage} isAuthenticated={isAuthenticated} />
         <ProtectedRoute path="/prodCategoria" component={catProdPage} isAuthenticated={isAuthenticated} />
         <ProtectedRoute path="/marca" component={MarcaPage} isAuthenticated={isAuthenticated} />
+        <ProtectedRoute path="/verInventario" component={VerInventarioPage} isAuthenticated={isAuthenticated} />
+        <ProtectedRoute path="/agregarInventario" component={AgregarInventarioPage} isAuthenticated={isAuthenticated} />
         
         {/* Página de error 404 */}
         <Route path="/error404" exact>

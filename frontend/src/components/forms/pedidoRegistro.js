@@ -15,27 +15,34 @@ import {
 } from '@mui/material';
 import { Add as AddIcon, Remove as RemoveIcon } from '@mui/icons-material';
 
-const PedidoRegistro = ({ proveedores, empleados, productos, onSubmit }) => {
-  const [formData, setFormData] = useState({
-    suplierId: '',
-    employeeId: '',
-    details: [
-      {
-        units: 0,
-        pricePerUnit: 0,
-        discountAmount: 0,
-        ivaAmount: 0,
+const PedidoRegistro = ({ 
+  isEditing = false, 
+  initialData = null,
+  proveedores = [],
+  empleados = [],
+  productos = [],
+  onSubmit, 
+  onCancel 
+}) => {
+  const [formData, setFormData] = useState(
+    initialData || {
+      suplierId: '',
+      employeeId: '',
+      details: [{
+        units: '',
+        pricePerUnit: '',
+        discountAmount: '',
+        ivaAmount: '',
         isBonus: false,
         productId: ''
-      }
-    ]
-  });
+      }]
+    }
+  );
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
+  const handleChange = (field, value) => {
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [field]: value
     }));
   };
 
@@ -55,10 +62,10 @@ const PedidoRegistro = ({ proveedores, empleados, productos, onSubmit }) => {
     setFormData(prev => ({
       ...prev,
       details: [...prev.details, {
-        units: 0,
-        pricePerUnit: 0,
-        discountAmount: 0,
-        ivaAmount: 0,
+        units: '',
+        pricePerUnit: '',
+        discountAmount: '',
+        ivaAmount: '',
         isBonus: false,
         productId: ''
       }]
@@ -77,7 +84,23 @@ const PedidoRegistro = ({ proveedores, empleados, productos, onSubmit }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(formData);
+    
+    const pedidoData = {
+      ...(isEditing && { id: initialData.id }), // Incluir ID solo si es edición
+      suplierId: Number(formData.suplierId),
+      employeeId: Number(formData.employeeId),
+      details: formData.details.map(detail => ({
+        ...(isEditing && { id: detail.id }), // Incluir ID del detalle si es edición
+        units: Number(detail.units),
+        pricePerUnit: Number(detail.pricePerUnit),
+        discountAmount: Number(detail.discountAmount || 0),
+        ivaAmount: Number(detail.ivaAmount || 0),
+        isBonus: Boolean(detail.isBonus),
+        productId: Number(detail.productId)
+      }))
+    };
+
+    onSubmit(pedidoData);
   };
 
   return (
@@ -91,9 +114,9 @@ const PedidoRegistro = ({ proveedores, empleados, productos, onSubmit }) => {
             <FormControl fullWidth>
               <InputLabel>Proveedor</InputLabel>
               <Select
-                name="suplierId"
                 value={formData.suplierId}
-                onChange={handleChange}
+                onChange={(e) => handleChange('suplierId', e.target.value)}
+                label="Proveedor"
                 required
               >
                 {proveedores.map((proveedor) => (
@@ -109,7 +132,7 @@ const PedidoRegistro = ({ proveedores, empleados, productos, onSubmit }) => {
             <FormControl fullWidth>
               <InputLabel>Empleado</InputLabel>
               <Select
-                value={formData.employeeId || ''}
+                value={formData.employeeId}
                 onChange={(e) => handleChange('employeeId', e.target.value)}
                 label="Empleado"
                 required
@@ -146,6 +169,7 @@ const PedidoRegistro = ({ proveedores, empleados, productos, onSubmit }) => {
                   <Select
                     value={detail.productId}
                     onChange={(e) => handleDetailChange(index, 'productId', e.target.value)}
+                    label="Producto"
                     required
                   >
                     {productos.map((producto) => (
@@ -163,7 +187,7 @@ const PedidoRegistro = ({ proveedores, empleados, productos, onSubmit }) => {
                   label="Unidades"
                   type="number"
                   value={detail.units}
-                  onChange={(e) => handleDetailChange(index, 'units', parseInt(e.target.value))}
+                  onChange={(e) => handleDetailChange(index, 'units', e.target.value)}
                   required
                 />
               </Grid>
@@ -174,7 +198,7 @@ const PedidoRegistro = ({ proveedores, empleados, productos, onSubmit }) => {
                   label="Precio por Unidad"
                   type="number"
                   value={detail.pricePerUnit}
-                  onChange={(e) => handleDetailChange(index, 'pricePerUnit', parseFloat(e.target.value))}
+                  onChange={(e) => handleDetailChange(index, 'pricePerUnit', e.target.value)}
                   required
                 />
               </Grid>
@@ -185,7 +209,7 @@ const PedidoRegistro = ({ proveedores, empleados, productos, onSubmit }) => {
                   label="Descuento"
                   type="number"
                   value={detail.discountAmount}
-                  onChange={(e) => handleDetailChange(index, 'discountAmount', parseFloat(e.target.value))}
+                  onChange={(e) => handleDetailChange(index, 'discountAmount', e.target.value)}
                 />
               </Grid>
 
@@ -195,7 +219,7 @@ const PedidoRegistro = ({ proveedores, empleados, productos, onSubmit }) => {
                   label="IVA"
                   type="number"
                   value={detail.ivaAmount}
-                  onChange={(e) => handleDetailChange(index, 'ivaAmount', parseFloat(e.target.value))}
+                  onChange={(e) => handleDetailChange(index, 'ivaAmount', e.target.value)}
                 />
               </Grid>
 

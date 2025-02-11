@@ -145,6 +145,50 @@ const apiProd = {
       throw error;
     }
   },
+
+  agregarInventario: async (inventarioData) => {
+    try {
+      const response = await axios.post(
+        `${API_BASE_URL}/inventory`,
+        inventarioData,
+        axiosConfig
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error al agregar al inventario:', error);
+      throw error;
+    }
+  },
+
+  obtenerInventario: async (estado = null) => {
+    try {
+      let url = `${API_BASE_URL}/inventory`;
+      
+      // Agregar el estado como query parameter si se proporciona
+      if (estado) {
+        url += `?State=${encodeURIComponent(estado)}`;
+      }
+
+      const response = await axios.get(url, axiosConfig);
+      return response.data;
+    } catch (error) {
+      console.error('Error al obtener inventario:', error);
+      return [];
+    }
+  },
+
+  obtenerEstadosInventario: async () => {
+    try {
+      const response = await axios.get(
+        `${API_BASE_URL}/inventory/state`,
+        axiosConfig
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error al obtener estados de inventario:', error);
+      throw error;
+    }
+  }
 };
 
 export default apiProd;

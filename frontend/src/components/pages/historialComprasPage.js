@@ -15,6 +15,7 @@ import {
   Box
 } from '@mui/material';
 import BusquedaCompras from '../forms/busquedaCompras';
+import PedidoRegistro from '../forms/pedidoRegistro';
 
 const HistorialComprasPage = () => {
   const [transacciones, setTransacciones] = useState([]);
@@ -23,6 +24,12 @@ const HistorialComprasPage = () => {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
+  const [editingTransaction, setEditingTransaction] = useState(null);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [editingPedido, setEditingPedido] = useState(null);
+  const [proveedores, setProveedores] = useState([]);
+  const [empleados, setEmpleados] = useState([]);
+  const [productos, setProductos] = useState([]);
 
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat('es-NI', {
@@ -36,19 +43,87 @@ const HistorialComprasPage = () => {
     handleBuscar({ fechaInicio: hoy, fechaFin: hoy });
   }, []);
 
+  useEffect(() => {
+    const cargarDatos = async () => {
+      try {
+        const [proveedoresData, empleadosData, productosData] = await Promise.all([
+          apiBuyBills.obtenerProveedores(),
+          apiBuyBills.obtenerEmpleados(),
+          apiBuyBills.obtenerProductos()
+        ]);
+        
+        setProveedores(proveedoresData);
+        setEmpleados(empleadosData);
+        setProductos(productosData);
+      } catch (error) {
+        console.error('Error al cargar datos:', error);
+        mostrarMensaje('Error al cargar los datos necesarios', 'error');
+      }
+    };
+
+    cargarDatos();
+  }, []);
+
   const handleVerDetalle = (transaccion) => {
     setDetalleSeleccionado(transaccion);
     setOpenDialog(true);
   };
 
+  const handleEditar = (transaccion) => {
+    setEditingPedido({
+      id: transaccion.id,
+      suplierId: transaccion.suplier.id,
+      employeeId: transaccion.employee.id,
+      details: transaccion.details.map(detail => ({
+        id: detail.id,
+        units: detail.units,
+        pricePerUnit: detail.pricePerUnit,
+        discountAmount: detail.discountAmount,
+        ivaAmount: detail.ivaAmount,
+        isBonus: detail.isBonus,
+        productId: detail.product.id
+      }))
+    });
+    setEditModalOpen(true);
+  };
+
+  const handleGuardarEdicion = async (pedidoEditado) => {
+    try {
+      await apiBuyBills.actualizarPedido(pedidoEditado);
+      mostrarMensaje('Pedido actualizado exitosamente');
+      setEditModalOpen(false);
+      setEditingPedido(null);
+      // Recargar la lista
+      handleBuscar({ 
+        fechaInicio: new Date(), 
+        fechaFin: new Date() 
+      });
+    } catch (error) {
+      console.error('Error al actualizar pedido:', error);
+      mostrarMensaje(
+        'Error al actualizar el pedido: ' + 
+        (error.response?.data?.message || error.message), 
+        'error'
+      );
+    }
+  };
+
   const handleEliminar = async (id) => {
     try {
-      // Aquí iría la lógica de eliminación cuando esté disponible en el API
-      mostrarMensaje('Transacción eliminada exitosamente');
-      handleBuscar({ fechaInicio: new Date(), fechaFin: new Date() });
+      await apiBuyBills.eliminarPedido(id);
+      mostrarMensaje('Pedido eliminado exitosamente');
+      // Recargar la lista
+      handleBuscar({ 
+        fechaInicio: new Date(), 
+        fechaFin: new Date() 
+      });
     } catch (error) {
-      console.error('Error al eliminar transacción:', error);
-      mostrarMensaje('Error al eliminar la transacción', 'error');
+      console.error('Error al eliminar pedido:', error);
+      mostrarMensaje(
+        'Error al eliminar el pedido: ' + 
+        (error.response?.data?.message || error.message), 
+        'error'
+      );
     }
   };
 
@@ -82,6 +157,7 @@ const HistorialComprasPage = () => {
         <TablaTransaccionesCompra
           transacciones={transacciones}
           onVerDetalle={handleVerDetalle}
+          onEditar={handleEditar}
           onEliminar={handleEliminar}
         />
 
@@ -174,6 +250,28 @@ const HistorialComprasPage = () => {
               Cerrar
             </Button>
           </DialogActions>
+        </Dialog>
+
+        <Dialog 
+          open={editModalOpen} 
+          onClose={() => setEditModalOpen(false)}
+          maxWidth="md"
+          fullWidth
+        >
+          <DialogTitle>Editar Pedido</DialogTitle>
+          <DialogContent>
+            {editingPedido && (
+              <PedidoRegistro
+                isEditing={true}
+                initialData={editingPedido}
+                proveedores={proveedores}
+                empleados={empleados}
+                productos={productos}
+                onSubmit={handleGuardarEdicion}
+                onCancel={() => setEditModalOpen(false)}
+              />
+            )}
+          </DialogContent>
         </Dialog>
 
         <Snackbar
