@@ -90,7 +90,7 @@ const HistorialComprasPage = () => {
   const handleGuardarEdicion = async (pedidoEditado) => {
     try {
       await apiBuyBills.actualizarPedido(pedidoEditado);
-      mostrarMensaje('Pedido actualizado exitosamente');
+      mostrarMensaje('Compra actualizada exitosamente');
       setEditModalOpen(false);
       setEditingPedido(null);
       // Recargar la lista
@@ -149,7 +149,7 @@ const HistorialComprasPage = () => {
     <MainPageContainer>
       <Box sx={{ p: 3 }}>
         <Typography variant="h5" gutterBottom sx={{ mb: 3 }}>
-          Historial de Compras
+          Lista de Compras
         </Typography>
         
         <BusquedaCompras onBuscar={handleBuscar} />
@@ -258,7 +258,7 @@ const HistorialComprasPage = () => {
           maxWidth="md"
           fullWidth
         >
-          <DialogTitle>Editar Pedido</DialogTitle>
+          <DialogTitle>Editar Compra</DialogTitle>
           <DialogContent>
             {editingPedido && (
               <PedidoRegistro

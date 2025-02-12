@@ -1,19 +1,35 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import MainPageContainer from '../layout/mainpagecontainer';
-import { Grid, Card, CardContent, Typography, CardActionArea } from '@mui/material';
+import ConfiguracionForm from '../forms/configuracionForm';
+import { 
+  Box, 
+  Typography, 
+  Tabs, 
+  Tab,
+  Grid, 
+  Card, 
+  CardContent, 
+  CardActionArea 
+} from '@mui/material';
 import { 
   Brightness7,
   Brightness4,
   Park,
   Water,
-  Palette
+  Palette,
+  Settings
 } from '@mui/icons-material';
 import { ColorModeContext } from '../../context/ThemeContext';
 import { useTheme } from '@mui/material/styles';
 
 const ConfigPage = () => {
+  const [selectedTab, setSelectedTab] = useState(0);
   const colorMode = useContext(ColorModeContext);
   const theme = useTheme();
+
+  const handleTabChange = (event, newValue) => {
+    setSelectedTab(newValue);
+  };
 
   const themeCards = [
     {
@@ -44,51 +60,73 @@ const ConfigPage = () => {
 
   return (
     <MainPageContainer>
-      <Typography variant="h4" gutterBottom sx={{ mb: 4 }}>
-        Configuración
-      </Typography>
+      <Box sx={{ p: 3 }}>
+        <Typography variant="h5" gutterBottom sx={{ mb: 3 }}>
+          Configuración
+        </Typography>
 
-      <Card sx={{ mb: 4 }}>
-        <CardContent>
-          <Typography variant="h5" gutterBottom sx={{ display: 'flex', alignItems: 'center' }}>
-            <Palette sx={{ mr: 1 }} /> Temas
-          </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-            Selecciona el tema que prefieras para personalizar la apariencia de la aplicación
-          </Typography>
-          
-          <Grid container spacing={3}>
-            {themeCards.map((themeOption) => (
-              <Grid item xs={12} sm={6} md={3} key={themeOption.id}>
-                <Card 
-                  sx={{ 
-                    height: '100%',
-                    border: theme.palette.mode === themeOption.id ? '2px solid' : 'none',
-                    borderColor: 'primary.main'
-                  }}
-                >
-                  <CardActionArea 
-                    onClick={() => colorMode.changeTheme(themeOption.id)}
-                    sx={{ height: '100%' }}
-                  >
-                    <CardContent sx={{ textAlign: 'center', padding: 3 }}>
-                      {themeOption.icon}
-                      <Typography variant="h6" component="div" gutterBottom>
-                        {themeOption.title}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        {themeOption.description}
-                      </Typography>
-                    </CardContent>
-                  </CardActionArea>
-                </Card>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
+          <Tabs 
+            value={selectedTab} 
+            onChange={handleTabChange}
+            aria-label="configuración tabs"
+          >
+            <Tab 
+              icon={<Settings />} 
+              label="Configuración del Sistema" 
+              iconPosition="start"
+            />
+            <Tab 
+              icon={<Palette />} 
+              label="Temas" 
+              iconPosition="start"
+            />
+          </Tabs>
+        </Box>
+
+        {selectedTab === 0 && (
+          <ConfiguracionForm />
+        )}
+
+        {selectedTab === 1 && (
+          <Card sx={{ mb: 4 }}>
+            <CardContent>
+              <Typography variant="h6" gutterBottom sx={{ mb: 3 }}>
+                Selecciona el tema que prefieras para personalizar la apariencia de la aplicación
+              </Typography>
+              
+              <Grid container spacing={3}>
+                {themeCards.map((themeOption) => (
+                  <Grid item xs={12} sm={6} md={3} key={themeOption.id}>
+                    <Card 
+                      sx={{ 
+                        height: '100%',
+                        border: theme.palette.mode === themeOption.id ? '2px solid' : 'none',
+                        borderColor: 'primary.main'
+                      }}
+                    >
+                      <CardActionArea 
+                        onClick={() => colorMode.changeTheme(themeOption.id)}
+                        sx={{ height: '100%' }}
+                      >
+                        <CardContent sx={{ textAlign: 'center', padding: 3 }}>
+                          {themeOption.icon}
+                          <Typography variant="h6" component="div" gutterBottom>
+                            {themeOption.title}
+                          </Typography>
+                          <Typography variant="body2" color="text.secondary">
+                            {themeOption.description}
+                          </Typography>
+                        </CardContent>
+                      </CardActionArea>
+                    </Card>
+                  </Grid>
+                ))}
               </Grid>
-            ))}
-          </Grid>
-        </CardContent>
-      </Card>
-
-      {/* Aquí puedes agregar más secciones de configuración */}
+            </CardContent>
+          </Card>
+        )}
+      </Box>
     </MainPageContainer>
   );
 };

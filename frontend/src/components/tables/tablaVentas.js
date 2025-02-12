@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Table,
   TableBody,
@@ -7,187 +7,130 @@ import {
   TableHead,
   TableRow,
   Paper,
+  IconButton,
   Button,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
-  TextField,
+  Tooltip
 } from '@mui/material';
+import {
+  Visibility as VisibilityIcon,
+  Print as PrintIcon
+} from '@mui/icons-material';
+import FacturaPDF from '../pdf/FacturaPDF';
+import apiConfig from '../../api/apiConfig';
 
-const TablaVentas = ({ ventas, onEditarClick, handleGuardarEdicion, onEliminarClick }) => {
-  const cellStyles = {
-    fontSize: '15px',
-    fontWeight: 'bold',
-    color: 'white',
+const TablaVentas = ({ ventas, onVerDetalle }) => {
+  const [showPDF, setShowPDF] = useState(false);
+  const [configuracion, setConfiguracion] = useState(null);
+  const [ventaSeleccionada, setVentaSeleccionada] = useState(null);
+
+  const handlePrintClick = async (venta) => {
+    try {
+      const config = await apiConfig.obtenerConfiguracion();
+      setConfiguracion(config);
+      setVentaSeleccionada(venta);
+      setShowPDF(true);
+    } catch (error) {
+      console.error('Error al cargar configuración:', error);
+    }
   };
 
-  const rowStyles = {
-    background: '#2196f3',
-    color: 'black',
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('es-NI', {
+      style: 'currency',
+      currency: 'NIO'
+    }).format(amount);
   };
 
-  const buttonStyles = {
-    fontSize: '12px',
-    marginRight: '5px',
-  };
-
-  const [modalOpen, setModalOpen] = useState(false);
-  const [selectedVenta, setSelectedVenta] = useState(null);
-
-  const handleEditarClick = (venta) => {
-    setSelectedVenta(venta);
-    setModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setModalOpen(false);
-    setSelectedVenta(null);
-  };
-
-  const handleEditFieldChange = (fieldName, value) => {
-    setSelectedVenta({
-      ...selectedVenta,
-      [fieldName]: value,
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString('es-ES', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
     });
   };
 
   return (
-    <TableContainer component={Paper} style={{ marginTop: '20px', margin: 'auto' }}>
-      <Table>
-        <TableHead>
-          <TableRow style={rowStyles}>
-            <TableCell style={cellStyles}>Fecha</TableCell>
-            <TableCell style={cellStyles}>Empleado</TableCell>
-            <TableCell style={cellStyles}>Cliente</TableCell>
-            <TableCell style={cellStyles}>Tipo de Compra</TableCell>
-            <TableCell style={cellStyles}>Subtotal</TableCell>
-            <TableCell style={cellStyles}>Descuento</TableCell>
-            <TableCell style={cellStyles}>IVA</TableCell>
-            <TableCell style={cellStyles}>Total</TableCell>
-            <TableCell style={cellStyles}>Acciones</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {ventas.map((venta, index) => (
-            <TableRow key={index} style={{ background: index % 2 === 0 ? '#f9f9f9' : 'white' }}>
-              <TableCell style={{ fontSize: '14px', textAlign: 'center' }}>{venta.fecha}</TableCell>
-              <TableCell style={{ fontSize: '14px', textAlign: 'center' }}>{venta.idEmpleado}</TableCell>
-              <TableCell style={{ fontSize: '14px', textAlign: 'center' }}>{venta.idCliente}</TableCell>
-              <TableCell style={{ fontSize: '14px', textAlign: 'center' }}>{venta.tipoCompra}</TableCell>
-              <TableCell style={{ fontSize: '14px', textAlign: 'center' }}>{venta.subtotal}</TableCell>
-              <TableCell style={{ fontSize: '14px', textAlign: 'center' }}>{venta.descuento}</TableCell>
-              <TableCell style={{ fontSize: '14px', textAlign: 'center' }}>{venta.iva}</TableCell>
-              <TableCell style={{ fontSize: '14px', textAlign: 'center' }}>{venta.total}</TableCell>
-              <TableCell style={{ textAlign: 'center' }}>
-                <Button
-                  onClick={() => handleEditarClick(venta)}
-                  variant="contained"
-                  color="primary"
-                  size="small"
-                  style={{ ...buttonStyles }}
-                >
-                  Editar
-                </Button>
-                <Button
-                  onClick={() => onEliminarClick(venta.id)}
-                  variant="contained"
-                  color="secondary"
-                  size="small"
-                  style={{ ...buttonStyles, backgroundColor: 'red' }}
-                >
-                  Eliminar
-                </Button>
-              </TableCell>
+    <>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Fecha</TableCell>
+              <TableCell>Cliente</TableCell>
+              <TableCell>Empleado</TableCell>
+              <TableCell align="right">Subtotal</TableCell>
+              <TableCell align="right">Descuento</TableCell>
+              <TableCell align="right">IVA</TableCell>
+              <TableCell align="right">Total</TableCell>
+              <TableCell align="center">Acciones</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-      <Dialog open={modalOpen} onClose={handleCloseModal}>
-        <DialogTitle>Editar Venta</DialogTitle>
+          </TableHead>
+          <TableBody>
+            {ventas.map((venta) => (
+              <TableRow key={venta.id}>
+                <TableCell>{formatDate(venta.date)}</TableCell>
+                <TableCell>{`${venta.client.firstName} ${venta.client.firstLastName}`}</TableCell>
+                <TableCell>{`${venta.employee.firstName} ${venta.employee.firstLastName}`}</TableCell>
+                <TableCell align="right">{formatCurrency(venta.subTotal)}</TableCell>
+                <TableCell align="right">{formatCurrency(venta.discountAmount)}</TableCell>
+                <TableCell align="right">{formatCurrency(venta.ivaAmount)}</TableCell>
+                <TableCell align="right">{formatCurrency(venta.total)}</TableCell>
+                <TableCell align="center">
+                  <Tooltip title="Ver Detalles">
+                    <IconButton
+                      color="primary"
+                      onClick={() => onVerDetalle(venta)}
+                      size="small"
+                    >
+                      <VisibilityIcon />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Imprimir Factura">
+                    <IconButton
+                      color="secondary"
+                      onClick={() => handlePrintClick(venta)}
+                      size="small"
+                    >
+                      <PrintIcon />
+                    </IconButton>
+                  </Tooltip>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+
+      <Dialog
+        open={showPDF}
+        onClose={() => setShowPDF(false)}
+        maxWidth="lg"
+        fullWidth
+      >
+        <DialogTitle>
+          Factura de Venta
+        </DialogTitle>
         <DialogContent>
-          <form>
-            <TextField
-              label="Fecha"
-              variant="outlined"
-              margin="normal"
-              fullWidth
-              required
-              value={selectedVenta ? selectedVenta.fecha : ''}
-              onChange={(e) => handleEditFieldChange('fecha', e.target.value)}
+          {ventaSeleccionada && configuracion && (
+            <FacturaPDF 
+              venta={ventaSeleccionada}
+              configuracion={configuracion}
             />
-            <TextField
-              label="Empleado"
-              variant="outlined"
-              margin="normal"
-              fullWidth
-              required
-              value={selectedVenta ? selectedVenta.idEmpleado : ''}
-              onChange={(e) => handleEditFieldChange('idEmpleado', e.target.value)}
-            />
-            <TextField
-              label="Cliente"
-              variant="outlined"
-              margin="normal"
-              fullWidth
-              required
-              value={selectedVenta ? selectedVenta.idCliente : ''}
-              onChange={(e) => handleEditFieldChange('idCliente', e.target.value)}
-            />
-            <TextField
-              label="Tipo de Compra"
-              variant="outlined"
-              margin="normal"
-              fullWidth
-              required
-              value={selectedVenta ? selectedVenta.tipoCompra : ''}
-              onChange={(e) => handleEditFieldChange('tipoCompra', e.target.value)}
-            />
-            <TextField
-              label="Subtotal"
-              variant="outlined"
-              margin="normal"
-              fullWidth
-              required
-              value={selectedVenta ? selectedVenta.subtotal : ''}
-              onChange={(e) => handleEditFieldChange('subtotal', e.target.value)}
-            />
-            <TextField
-              label="Descuento"
-              variant="outlined"
-              margin="normal"
-              fullWidth
-              required
-              value={selectedVenta ? selectedVenta.descuento : ''}
-              onChange={(e) => handleEditFieldChange('descuento', e.target.value)}
-            />
-            <TextField
-              label="IVA"
-              variant="outlined"
-              margin="normal"
-              fullWidth
-              required
-              value={selectedVenta ? selectedVenta.iva : ''}
-              onChange={(e) => handleEditFieldChange('iva', e.target.value)}
-            />
-            <TextField
-              label="Total"
-              variant="outlined"
-              margin="normal"
-              fullWidth
-              required
-              value={selectedVenta ? selectedVenta.total : ''}
-              onChange={(e) => handleEditFieldChange('total', e.target.value)}
-            />
-          </form>
+          )}
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => { console.log(selectedVenta); handleGuardarEdicion(selectedVenta); handleCloseModal(); }} color="primary">
+          <Button onClick={() => setShowPDF(false)}>
             Cerrar
           </Button>
         </DialogActions>
       </Dialog>
-    </TableContainer>
+    </>
   );
 };
 

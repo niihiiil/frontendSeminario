@@ -14,13 +14,13 @@ const InventarioPage = () => {
     {
       title: 'Ver Inventario',
       description: 'Consulta y gestiona el inventario actual',
-      icon: <InventoryIcon sx={{ fontSize: 40 }} />,
+      icon: <InventoryIcon sx={{ fontSize: 40, color: '#1976d2' }} />,
       onClick: () => history.push('/verInventario')
     },
     {
       title: 'Agregar al Inventario',
       description: 'Añade productos manualmente al inventario',
-      icon: <AddBoxIcon sx={{ fontSize: 40 }} />,
+      icon: <AddBoxIcon sx={{ fontSize: 40, color: '#1976d2' }} />,
       onClick: () => history.push('/agregarInventario')
     }
   ];

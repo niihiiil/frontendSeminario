@@ -26,17 +26,12 @@ const ComprasPage = () => {
       path: '/proveedores'
     },
     {
-      title: 'Historial',
-      description: 'Historial de compras realizadas',
+      title: 'Lista de Compras',
+      description: 'Lista de compras realizadas',
       icon: <History sx={{ fontSize: 60, color: '#1976d2', marginBottom: 2 }} />,
       path: '/registroCompras'
     },
-    {
-      title: 'Órdenes',
-      description: 'Gestión de órdenes de compra',
-      icon: <ListAlt sx={{ fontSize: 60, color: '#1976d2', marginBottom: 2 }} />,
-      path: '/pedidos'
-    }
+   
   ];
 
   return (

@@ -106,7 +106,7 @@ const PedidoRegistro = ({
   return (
     <Paper elevation={3} sx={{ p: 3, m: 2 }}>
       <Typography variant="h6" gutterBottom>
-        Registro de Pedido
+        Registro de Compra
       </Typography>
       <form onSubmit={handleSubmit}>
         <Grid container spacing={3}>
@@ -251,7 +251,7 @@ const PedidoRegistro = ({
               variant="contained"
               color="primary"
             >
-              Registrar Pedido
+              Registrar Compra
             </Button>
           </Grid>
         </Grid>

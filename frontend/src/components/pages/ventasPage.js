@@ -26,17 +26,11 @@ const VentasPage = () => {
       path: '/clientes'
     },
     {
-      title: 'Historial',
-      description: 'Historial de ventas realizadas',
+      title: 'Lista de Ventas',
+      description: 'Lista de ventas realizadas',
       icon: <History sx={{ fontSize: 60, color: '#1976d2', marginBottom: 2 }} />,
       path: '/registroVentas'
     },
-    {
-      title: 'Facturas',
-      description: 'Gestión de facturas',
-      icon: <Receipt sx={{ fontSize: 60, color: '#1976d2', marginBottom: 2 }} />,
-      path: '/facturas'
-    }
   ];
 
   return (

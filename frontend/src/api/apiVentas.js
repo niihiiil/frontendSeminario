@@ -1,16 +1,64 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'https://mte-api.onrender.com/api/client';
+const API_BASE_URL = 'https://mte-api.onrender.com/api';
+
+const axiosConfig = {
+  headers: {
+    'Content-Type': 'application/json'
+  }
+};
 
 const apiVentas = {
-  obtenerClientes: async () => {
+  obtenerVentas: async (params = {}) => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/all`);
-      console.log('Obtener Clientes:', response.data);
+      let url = `${API_BASE_URL}/sale-bills`;
+      
+      // Agregar parámetros de búsqueda si existen
+      if (params.fechaInicio && params.fechaFin) {
+        const fromDate = formatearFecha(params.fechaInicio, false);
+        const toDate = formatearFecha(params.fechaFin, true);
+        url += `?From=${encodeURIComponent(fromDate)}&To=${encodeURIComponent(toDate)}`;
+      }
+
+      const response = await axios.get(url, axiosConfig);
+      return Array.isArray(response.data) ? response.data : [];
+    } catch (error) {
+      console.error('Error al obtener ventas:', error);
+      return [];
+    }
+  },
+
+  crearVenta: async (ventaData) => {
+    try {
+      const response = await axios.post(
+        `${API_BASE_URL}/sale-bills`,
+        ventaData,
+        axiosConfig
+      );
       return response.data;
     } catch (error) {
-      console.error('Error en obtenerClientes:', error);
+      console.error('Error al crear venta:', error);
       throw error;
+    }
+  },
+
+  obtenerClientes: async () => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/client/all`, axiosConfig);
+      return response.data;
+    } catch (error) {
+      console.error('Error al obtener clientes:', error);
+      return [];
+    }
+  },
+
+  obtenerEmpleados: async () => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/employee/all`, axiosConfig);
+      return response.data;
+    } catch (error) {
+      console.error('Error al obtener empleados:', error);
+      return [];
     }
   },
 
@@ -51,6 +99,17 @@ const apiVentas = {
       throw error;
     }
   },
-};  
+};
+
+// Función auxiliar para formatear fechas
+const formatearFecha = (fecha, esFin = false) => {
+  const d = new Date(fecha);
+  if (esFin) {
+    d.setHours(23, 59, 59, 999);
+  } else {
+    d.setHours(0, 0, 0, 0);
+  }
+  return d.toISOString();
+};
 
 export default apiVentas;

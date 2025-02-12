@@ -32,8 +32,8 @@ const ProductosPage = () => {
       path: '/marca'
     },
     {
-      title: 'Historial',
-      description: 'Historial de cambios en productos',
+      title: 'Lista de Productos',
+      description: 'Lista de productos',
       icon: <History sx={{ fontSize: 60, color: '#1976d2', marginBottom: 2 }} />,
       path: '/prodHistorial'
     }
